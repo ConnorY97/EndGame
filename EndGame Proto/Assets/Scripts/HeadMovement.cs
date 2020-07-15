@@ -32,14 +32,23 @@ public class HeadMovement : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1))		
+		if (Input.GetKeyDown(KeyCode.Alpha1))
 			currentState = State.HEAD;
 		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
 			currentState = State.ARMS;
+			rb.transform.position = new Vector3(rb.transform.position.x, 0.5f, rb.transform.position.z); 
+		}
 		if (Input.GetKeyDown(KeyCode.Alpha3))
+		{
 			currentState = State.LEGS;
+			rb.transform.position = new Vector3(rb.transform.position.x, 0.5f, rb.transform.position.z);
+		}
 		if (Input.GetKeyDown(KeyCode.Alpha4))
-			currentState = State.FULL; 
+		{
+			rb.transform.position = new Vector3(rb.transform.position.x, 0.5f, rb.transform.position.z);
+			currentState = State.FULL;
+		}
 	}
 
 	private void FixedUpdate()
