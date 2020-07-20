@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float _angularSpeed;
 	private Rigidbody _rb;
 	private bool _holding = false;
-	private bool _lifting = false;
 
 	private STATE _currentState = STATE.FREE; 
 
@@ -32,12 +31,9 @@ public class PlayerMovement : MonoBehaviour
 	//Transform _trans;
 	private Vector3 _objPos;
 
-	private Transform _liftedObject;
-	private Vector3 _originalPosition;
-
 	private Rigidbody _heldObject;
-
 	private Vector3 _heldObjectNormal;
+	private Vector3 _heldOjectPosition; 
 
 	private int _layerMask = 1 << 8;
 
@@ -64,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
 		Debug.DrawRay(transform.position - new Vector3(0, 0.05f, 0), transform.forward * 2, Color.white);
 
+		//Pushing 
 		if (Input.GetKeyDown(KeyCode.E))
 		{
 			if (_holding == false)
@@ -84,7 +81,29 @@ public class PlayerMovement : MonoBehaviour
 				_heldObject.isKinematic = true;
 				_currentState = STATE.FREE;
 			}
+		}
 
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			if (_holding == false)
+			{
+				if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), transform.forward, out hit, 2, _layerMask))
+				{
+					_heldObject = hit.collider.GetComponent<Rigidbody>();
+					_heldObject.isKinematic = true; 
+					_heldOjectPosition = _heldObject.GetComponent<Transform>().position;
+					_heldObject.GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z); 
+					_currentState = STATE.LIFTING;
+					_holding = true;
+				}
+			}
+			else if (_holding == true)
+			{
+				_holding = false;
+				_heldObject.isKinematic = false;
+				_heldObject.GetComponent<Transform>().position = _heldOjectPosition;
+				_currentState = STATE.FREE; 
+			}
 		}
 	}
 
@@ -115,6 +134,11 @@ public class PlayerMovement : MonoBehaviour
 					_rb.velocity = input.z * -_heldObjectNormal * _speed;
 					_rb.constraints = RigidbodyConstraints.FreezeRotation; 
 					break;
+				}
+			case STATE.LIFTING:
+				{
+					_rb.constraints = RigidbodyConstraints.FreezeAll; 
+					break; 
 				}
 		}
 
