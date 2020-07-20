@@ -5,20 +5,29 @@ using UnityEngine.Assertions.Must;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 10.0f;
-    public float maxSpeed = 100.0f;
+    [SerializeField] private float _speed;
+    [SerializeField] private float _maxSpeed = 100.0f;
+    [SerializeField] private float _angularSpeed;
     private Rigidbody _rb;
     private bool _holding = false;
 
-    Vector3 _mosuePos;
+    private Transform _cameraTransform;
+    private Vector3 _forward;
+    private Vector3 _right;
+    private Vector2 _input;
+    private Vector2 _inputNormalized;
+    private float _angle;
+
+    private Vector3 _mosuePos;
     //Transform _trans;
-    Vector3 _objPos;
-    float _angle; 
+    private Vector3 _objPos;
+     
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _cameraTransform = Camera.main.transform;
     }
 
     // Update is called once per frame
@@ -42,16 +51,7 @@ public class PlayerMovement : MonoBehaviour
         float movementVertical = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(movementHorizontal, 0.0f, movementVertical);
-        //      if (Physics.Raycast(transform.position + new Vector3(0, 2, 0), transform.TransformDirection(Vector3.forward), out hit, 5, layerMask))
-        //{
-        //          Debug.DrawRay(transform.position + new Vector3(0, 2, 0), transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-        //          Debug.Log("Did hit"); 
-        //}
-        //      else
-        //{
-        //          Debug.DrawRay(transform.position + new Vector3(0, 2, 0), transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-        //          Debug.Log("Did not Hit");
-        //      }
+
         if (Input.GetKey(KeyCode.E))
         {
             if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), transform.TransformDirection(Vector3.forward), out hit, 5, _layerMask))
@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
                 Debug.DrawRay(transform.position - new Vector3(0, 0.5f, 0), transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 hit.collider.GetComponent<Rigidbody>().velocity = this.GetComponent<Rigidbody>().velocity;
                 _holding = true;
-                _rb.velocity = -hit.normal * movement.z * speed; 
+                _rb.velocity = -hit.normal * movement.z * _speed; 
             }
             else
             {
@@ -68,14 +68,52 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        
-
-
-        //_rb.AddForce(movement * speed);
-
-        //_rb.velocity = Vector3.ClampMagnitude(_rb.velocity, maxSpeed);
-
 		if (!_holding)
-            _rb.velocity = movement.normalized * speed; 
+            _rb.velocity = movement.normalized * _speed; 
     }
+
+    /*
+     *    [SerializeField] private float _speed;
+    [SerializeField] private float _angularSpeed;
+
+    private Transform _cameraTransform;
+    private Vector3 _forward;
+    private Vector3 _right;
+    private Vector2 _input;
+    private Vector2 _inputNormalized;
+    private float _angle;
+    
+    private Rigidbody _rb;
+    private Animator _anim;
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+        _anim = GetComponent<Animator>();
+        _cameraTransform = Camera.main.transform;
+    }
+
+    private void Update()
+    {
+        _input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        _inputNormalized = _input.normalized;
+        _angle = _cameraTransform.rotation.eulerAngles.y;
+        _forward = Quaternion.AngleAxis(_angle, Vector3.up) * Vector3.forward;
+        _right = Vector3.Cross(Vector3.up, _forward);
+        Debug.DrawRay(transform.position, _forward * 5f, Color.blue);
+        Debug.DrawRay(transform.position, _right * 5f, Color.red);
+
+        Vector3 velocity = ((_forward * _inputNormalized.y) + (_right * _inputNormalized.x)) * _speed;
+        _rb.velocity = velocity;
+
+        _anim.SetFloat("Speed", _rb.velocity.sqrMagnitude);
+    }
+
+    private void FixedUpdate()
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(_forward, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _angularSpeed * Time.fixedDeltaTime);
+    } 
+     * 
+     */
 }
