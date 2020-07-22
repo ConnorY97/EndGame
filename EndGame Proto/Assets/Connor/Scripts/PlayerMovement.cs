@@ -16,11 +16,11 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float _speed = 0;
 	[SerializeField] private float _angularSpeed = 0;
 	[SerializeField] private float _rayLength = 0;
-	[SerializeField] private float _offSetDist = 0; 
 
 	private Rigidbody _rb;
+	private Animator _animator; 
 
-	private bool _holding = false;
+	private bool _pushing = false;
 	private bool _lifting = false; 
 
 	private STATE _currentState = STATE.FREE; 
@@ -47,13 +47,15 @@ public class PlayerMovement : MonoBehaviour
 	void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
+		_animator = GetComponent<Animator>(); 
 		_cameraTransform = Camera.main.transform;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		_rayPos = transform.position - new Vector3(0, 0.5f, 0);
+
+		_rayPos = transform.position + new Vector3(0, 0.25f, 0);
 
 		float movementHorizontal = Input.GetAxis("Horizontal");
 		float movementVertical = Input.GetAxis("Vertical");
@@ -74,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if (_lifting == false)
 			{
-				if (_holding == false)
+				if (_pushing == false)
 				{
 					if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
 					{
@@ -83,27 +85,25 @@ public class PlayerMovement : MonoBehaviour
 						_heldObject.GetComponent<FixedJoint>().connectedBody = _rb;
 						_heldObjectNormal = hit.normal;
 						_currentState = STATE.PUSHING;
-						//transform.position = _heldObject.GetComponent<Transform>().position + (_heldObjectNormal * _offSetDist); 
-						_holding = true;
+						_pushing = true;
 					}
 				}
-				else if (_holding == true)
+				else if (_pushing == true)
 				{
 					_heldObject.GetComponent<FixedJoint>().connectedBody = null;
 					_heldObject.isKinematic = true;
 					//_sj.connectedBody = null; 
 					_heldObject.transform.SetParent(null);
-					_holding = false;
+					_pushing = false;
 					_currentState = STATE.FREE;
 				}
 			}
-
 		}
 
 		//Lifting 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			if (_holding == false)
+			if (_pushing == false)
 			{
 				if (_lifting == false)
 				{
@@ -149,5 +149,11 @@ public class PlayerMovement : MonoBehaviour
 					break;
 				}
 		}
+		//Animation
+		_animator.SetFloat("Speed", _rb.velocity.magnitude);
+		_animator.SetBool("Pushing", _pushing);
+		_animator.SetBool("Lifting", _lifting); 
+		_animator.SetFloat("Direction", Mathf.RoundToInt(Vector3.Dot(_rb.velocity.normalized, transform.forward)));
+		Debug.Log(Vector3.Dot(_rb.velocity.normalized, transform.forward));
 	}
 }
