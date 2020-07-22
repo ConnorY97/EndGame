@@ -15,8 +15,11 @@ public class PlayerMovement : MonoBehaviour
 {
 	[SerializeField] private float _speed = 0;
 	[SerializeField] private float _angularSpeed = 0;
+	[SerializeField] private float _rayLength = 0;
+	[SerializeField] private float _offSetDist = 0; 
+
 	private Rigidbody _rb;
-	private SpringJoint _sj; 
+
 	private bool _holding = false;
 	private bool _lifting = false; 
 
@@ -31,23 +34,27 @@ public class PlayerMovement : MonoBehaviour
 
 	private Rigidbody _heldObject;
 	private Vector3 _heldObjectNormal;
-	private Vector3 _heldOjectPosition; 
+	private Vector3 _heldOjectStartPosition; 
 
 	private int _layerMask = 1 << 8;
+
+	private Vector3 _rayPos; 
+
+
 
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
-		_sj = GetComponent<SpringJoint>();
-		_sj.connectedBody = null;
 		_cameraTransform = Camera.main.transform;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		_rayPos = transform.position - new Vector3(0, 0.5f, 0);
+
 		float movementHorizontal = Input.GetAxis("Horizontal");
 		float movementVertical = Input.GetAxis("Vertical");
 
@@ -61,51 +68,62 @@ public class PlayerMovement : MonoBehaviour
 
 		RaycastHit hit;
 
+		Debug.DrawRay(_rayPos, _forward * _rayLength, Color.white);
 		//Pushing 
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			if (_holding == false)
+			if (_lifting == false)
 			{
-				if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), _forward, out hit, 2, _layerMask))
+				if (_holding == false)
 				{
-					_heldObject = hit.collider.GetComponent<Rigidbody>();
-					_heldObject.isKinematic = false;
-					_sj.connectedBody = _heldObject; 
-					_heldObjectNormal = hit.normal;
-					_currentState = STATE.PUSHING;
-					_holding = true;
+					if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
+					{
+						_heldObject = hit.collider.GetComponent<Rigidbody>();
+						_heldObject.isKinematic = false;
+						_heldObject.GetComponent<FixedJoint>().connectedBody = _rb;
+						_heldObjectNormal = hit.normal;
+						_currentState = STATE.PUSHING;
+						//transform.position = _heldObject.GetComponent<Transform>().position + (_heldObjectNormal * _offSetDist); 
+						_holding = true;
+					}
+				}
+				else if (_holding == true)
+				{
+					_heldObject.GetComponent<FixedJoint>().connectedBody = null;
+					_heldObject.isKinematic = true;
+					//_sj.connectedBody = null; 
+					_heldObject.transform.SetParent(null);
+					_holding = false;
+					_currentState = STATE.FREE;
 				}
 			}
-			else if (_holding == true)
-			{
-				_heldObject.isKinematic = true; 
-				_sj.connectedBody = null; 
-				_heldObject.transform.SetParent(null); 
-				_holding = false;
-				_currentState = STATE.FREE;
-			}
+
 		}
 
 		//Lifting 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			if (_lifting == false)
+			if (_holding == false)
 			{
-				if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), _forward, out hit, 2, _layerMask))
+				if (_lifting == false)
 				{
-					_heldObject = hit.collider.GetComponent<Rigidbody>(); 
-					_heldOjectPosition = _heldObject.GetComponent<Transform>().position;
-					_heldObject.GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z); 
-					_currentState = STATE.LIFTING;
-					_lifting = true;
+					if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
+					{
+						_heldObject = hit.collider.GetComponent<Rigidbody>();
+						_heldOjectStartPosition = _heldObject.GetComponent<Transform>().position;
+						_heldObject.GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+						_currentState = STATE.LIFTING;
+						_lifting = true;
+					}
+				}
+				else if (_lifting == true)
+				{
+					_lifting = false;
+					_heldObject.GetComponent<Transform>().position = _heldOjectStartPosition;
+					_currentState = STATE.FREE;
 				}
 			}
-			else if (_lifting == true)
-			{
-				_lifting = false;
-				_heldObject.GetComponent<Transform>().position = _heldOjectPosition;
-				_currentState = STATE.FREE; 
-			}
+
 		}
 
 		switch (_currentState)
@@ -116,6 +134,7 @@ public class PlayerMovement : MonoBehaviour
 					transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _angularSpeed * Time.fixedDeltaTime);
 					_rb.constraints = RigidbodyConstraints.FreezeRotation;
 					_rb.velocity = _heading * _speed;
+					//_sj.spring = 0;
 					break;
 				}
 			case STATE.PUSHING:
