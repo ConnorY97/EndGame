@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 
-public enum STATE
+public enum State
 {
 	FREE,
 	PUSHING,
@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 	private bool _holding = false;
 	private bool _lifting = false; 
 
-	private STATE _currentState = STATE.FREE; 
+	private State _currentState = State.FREE; 
 
 	private Transform _cameraTransform;
 	private Vector3 _heading; 
@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
 					_heldObject = hit.collider.GetComponent<Rigidbody>();
 					_heldObject.isKinematic = false;
 					_heldObjectNormal = hit.normal;
-					_currentState = STATE.PUSHING;
+					_currentState = State.PUSHING;
 					_holding = true;
 				}
 			}
@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
 			{
 				_holding = false;
 				_heldObject.isKinematic = true;
-				_currentState = STATE.FREE;
+				_currentState = State.FREE;
 			}
 		}
 
@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
 					_heldObject.isKinematic = true; 
 					_heldOjectPosition = _heldObject.GetComponent<Transform>().position;
 					_heldObject.GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z); 
-					_currentState = STATE.LIFTING;
+					_currentState = State.LIFTING;
 					_lifting = true;
 				}
 			}
@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
 				_lifting = false;
 				_heldObject.isKinematic = false;
 				_heldObject.GetComponent<Transform>().position = _heldOjectPosition;
-				_currentState = STATE.FREE; 
+				_currentState = State.FREE; 
 			}
 		}
 	}
@@ -125,20 +125,20 @@ public class PlayerMovement : MonoBehaviour
 
 		switch(_currentState)
 		{
-			case STATE.FREE:
+			case State.FREE:
 				{
 					_rb.constraints = RigidbodyConstraints.FreezeRotation; 
 					_rb.velocity = _heading * _speed; 
 					break; 
 				}
-			case STATE.PUSHING:
+			case State.PUSHING:
 				{
 					_rb.velocity = _input.z * -_heldObjectNormal * _speed;
 					_heldObject.velocity = _rb.velocity; 
 					_rb.constraints = RigidbodyConstraints.FreezeRotation; 
 					break;
 				}
-			case STATE.LIFTING:
+			case State.LIFTING:
 				{
 					_rb.constraints = RigidbodyConstraints.FreezeAll; 
 					break; 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum State
+public enum STATE
 {
 	HEAD,
 	ARMS,
@@ -16,7 +16,7 @@ public class HeadMovement : MonoBehaviour
 	public float maxSpeed = 100.0f; 
 	private Rigidbody rb;
 
-	private State currentState;
+	private STATE currentState;
 
 	public GameObject arms;
 	public GameObject legs;
@@ -33,21 +33,21 @@ public class HeadMovement : MonoBehaviour
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			currentState = State.HEAD;
+			currentState = STATE.HEAD;
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			currentState = State.ARMS;
+			currentState = STATE.ARMS;
 			rb.transform.position = new Vector3(rb.transform.position.x, 0.5f, rb.transform.position.z); 
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
-			currentState = State.LEGS;
+			currentState = STATE.LEGS;
 			rb.transform.position = new Vector3(rb.transform.position.x, 0.5f, rb.transform.position.z);
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha4))
 		{
 			rb.transform.position = new Vector3(rb.transform.position.x, 0.5f, rb.transform.position.z);
-			currentState = State.FULL;
+			currentState = STATE.FULL;
 		}
 	}
 
@@ -57,25 +57,25 @@ public class HeadMovement : MonoBehaviour
 		//Depending on the state of the body will decide which method of movement is used 
 		switch (currentState)
 		{
-			case State.HEAD:
+			case STATE.HEAD:
 				arms.SetActive(false);
 				legs.SetActive(false);
 				bodyCollider.enabled = false;
 				armsCollider.enabled = false;
 				break;
-			case State.ARMS:
+			case STATE.ARMS:
 				arms.SetActive(true);
 				legs.SetActive(false);
 				bodyCollider.enabled = false;
 				armsCollider.enabled = true;
 				break;
-			case State.LEGS:
+			case STATE.LEGS:
 				arms.SetActive(false);
 				legs.SetActive(true);
 				bodyCollider.enabled = true;
 				armsCollider.enabled = false;
 				break;
-			case State.FULL:
+			case STATE.FULL:
 				arms.SetActive(true);
 				legs.SetActive(true);
 				bodyCollider.enabled = true;
