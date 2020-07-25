@@ -36,23 +36,22 @@ public class Orb : MonoBehaviour, IRequireInput
         _cameraTransform = Camera.main.transform;
     }
 
+    private void Start()
+    {
+        InitialiseFSM();
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _currentGolem == null)
-        {
-            Golem[] golems = FindObjectsOfType<Golem>();
-
-            for (int i = 0; i < golems.Length; i++)
-            {
-                if (Vector3.Distance(golems[i].transform.position, _thisTransform.position) <= _golemSearchRadius)
-                    JumpInGolem(golems[i]);
-            }
-        }
-
-        if (_currentGolem != null)
-            _thisTransform.position = _currentGolem.transform.position + _attachmentOffset;
-
         ComputeAxes();
+
+        _fsm.HandleTransitions();
+        _fsm.UpdateLogic();
+    }
+
+    private void FixedUpdate()
+    {
+        _fsm.UpdatePhysics();
     }
 
     private void InitialiseFSM()
@@ -61,9 +60,26 @@ public class Orb : MonoBehaviour, IRequireInput
 
         FSM.State groundedSuperState = new GroundedState(this, null);
         FSM.State idleState = new IdleState(this, groundedSuperState);
-        FSM.State rolingState = new RollingState(this, groundedSuperState);
+        FSM.State rollingState = new RollingState(this, groundedSuperState);
 
+        FSM.Condition isIdle = new Condition(() =>
+        {
+            return _currentHeading == Vector3.zero;
+        });
 
+        FSM.Condition isRolling = new Condition(() =>
+        {
+            return _currentHeading != Vector3.zero;
+        });
+
+        FSM.Transition groundedToIdle = new Transition(idleState, isIdle);
+        FSM.Transition groundedToRolling = new Transition(rollingState, isRolling);
+
+        _fsm.AddState(groundedSuperState, groundedToIdle, groundedToRolling);
+        _fsm.AddState(idleState);
+        _fsm.AddState(rollingState);
+
+        _fsm.SetDefaultState(groundedSuperState);
     }
 
     private void ComputeAxes()
@@ -86,18 +102,9 @@ public class Orb : MonoBehaviour, IRequireInput
         _movement.Move(_currentHeading);
     }
 
-    private void JumpInGolem(Golem golem)
+    public void ResetState()
     {
-        _CM_VirtualCamera.LookAt = null;
-        _CM_VirtualCamera.Follow = null;
-
-        _currentGolem = golem;
-        _currentGolem.Toggle(true);
-    }
-
-    private void JumpOutGolem()
-    {
-
+        _movement.Move(Vector3.zero);
     }
 
     // Interfaces

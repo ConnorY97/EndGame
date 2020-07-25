@@ -8,7 +8,8 @@ namespace FSM
         private State _currentState;
         private Dictionary<State, Transition[]> _transitionsDict;
 
-        private Transition[] _currentTransitions; // The transitions being considered at a given moment.
+        private Transition[] _currentStateTransitions; // The transitions being considered at a given moment.
+        private Transition[] _superStateTransitions;
 
         public FSM()
         {
@@ -16,7 +17,12 @@ namespace FSM
             _transitionsDict = new Dictionary<State, Transition[]>();
         }
 
-        public void AddState(State state, Transition[] transitions)
+        public void SetDefaultState(State defaultState)
+        {
+            MoveTo(defaultState);
+        }
+
+        public void AddState(State state, params Transition[] transitions)
         {
             if (_transitionsDict.ContainsKey(state))
                 return;
@@ -31,7 +37,40 @@ namespace FSM
                 _currentState.OnExit();
 
             _currentState = state;
+            _currentStateTransitions = _transitionsDict[_currentState];
+
+            if (_currentState.superState != null)
+                _superStateTransitions = _transitionsDict[_currentState.superState];
+            else
+                _superStateTransitions = null;
+
             _currentState.OnEnter();
+        }
+
+        public void HandleTransitions()
+        {
+            State dst = null;
+            for (int i = 0; i < _currentStateTransitions.Length; i++)
+            {
+                dst = _currentStateTransitions[i].EvaluateTransition();
+
+                if (dst != null)
+                    break;
+            }
+
+            if (dst == null)
+            {
+                for (int i = 0; i < _superStateTransitions.Length; i++)
+                {
+                    dst = _superStateTransitions[i].EvaluateTransition();
+
+                    if (dst != null)
+                        break;
+                }
+            }
+
+            if (dst != null && dst != _currentState)
+                MoveTo(dst);
         }
 
         public void UpdateLogic()

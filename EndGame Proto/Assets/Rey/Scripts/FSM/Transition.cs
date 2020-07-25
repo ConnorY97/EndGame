@@ -3,9 +3,9 @@
     public class Transition
     {
         private State _dstState;
-        private ICondition[] _conditions;
+        private Condition[] _conditions;
 
-        public Transition(State dstState, ICondition[] conditions)
+        public Transition(State dstState, params Condition[] conditions)
         {
             _dstState = dstState;
             _conditions = conditions;

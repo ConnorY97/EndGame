@@ -48,6 +48,7 @@ namespace OrbStates
 
         public override void OnExit()
         {
+            _orb.ResetState();
             Debug.Log("Exiting Idle State!");
         }
 
@@ -73,12 +74,13 @@ namespace OrbStates
 
         public override void OnEnter()
         {
-            Debug.Log("Entered Idle State!");
+            Debug.Log($"Entered {_debugName} State!");
         }
 
         public override void OnExit()
         {
-            Debug.Log("Exiting Idle State!");
+            _orb.ResetState();
+            Debug.Log($"Exited {_debugName} State!");
         }
 
         public override void UpdateLogic()
