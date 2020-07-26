@@ -2,6 +2,7 @@
 using FSM;
 using OrbStates;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Orb : MonoBehaviour, IRequireInput
 {
@@ -25,6 +26,8 @@ public class Orb : MonoBehaviour, IRequireInput
     private Transform _cameraTransform;
     [SerializeField] private CinemachineFreeLook _CM_VirtualCamera;
 
+    private bool _mounted;
+
     private FSM.FSM _fsm;
 
     private void Awake()
@@ -39,11 +42,17 @@ public class Orb : MonoBehaviour, IRequireInput
     private void Start()
     {
         InitialiseFSM();
+
+        DebugWindow.Inspect(() => "Current State: " + _fsm.GetCurrentState().debugName);
+        DebugWindow.Inspect(() => "Current Heading: " + _currentHeading.ToString());
     }
 
     private void Update()
     {
         ComputeAxes();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            _mounted = !_mounted;
 
         _fsm.HandleTransitions();
         _fsm.UpdateLogic();
@@ -61,6 +70,7 @@ public class Orb : MonoBehaviour, IRequireInput
         FSM.State groundedSuperState = new GroundedState(this, null);
         FSM.State idleState = new IdleState(this, groundedSuperState);
         FSM.State rollingState = new RollingState(this, groundedSuperState);
+        FSM.State mountedState = new MountedState(this, null);
 
         FSM.Condition isIdle = new Condition(() =>
         {
@@ -72,12 +82,27 @@ public class Orb : MonoBehaviour, IRequireInput
             return _currentHeading != Vector3.zero;
         });
 
+        FSM.Condition isMounted = new Condition(() =>
+        {
+            return _mounted;
+        });
+
+        FSM.Condition unMounted = new Condition(() =>
+        {
+            return !_mounted;
+        });
+
+        FSM.Transition groundedToMounted = new Transition(mountedState, isMounted);
         FSM.Transition groundedToIdle = new Transition(idleState, isIdle);
         FSM.Transition groundedToRolling = new Transition(rollingState, isRolling);
 
-        _fsm.AddState(groundedSuperState, groundedToIdle, groundedToRolling);
+        FSM.Transition mountedToGrounded = new Transition(groundedSuperState, unMounted);
+
+        _fsm.AddState(groundedSuperState, groundedToMounted, groundedToIdle, groundedToRolling);
         _fsm.AddState(idleState);
         _fsm.AddState(rollingState);
+
+        _fsm.AddState(mountedState, mountedToGrounded);
 
         _fsm.SetDefaultState(groundedSuperState);
     }

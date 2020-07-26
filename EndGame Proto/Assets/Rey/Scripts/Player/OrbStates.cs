@@ -93,4 +93,35 @@ namespace OrbStates
             _orb.Orientate();
         }
     }
+
+    public class MountedState : FSM.State
+    {
+        private Orb _orb;
+
+        public MountedState(Orb orb, FSM.State superState) : base(superState, "Mounted")
+        {
+            _orb = orb;
+        }
+
+        public override void OnEnter()
+        {
+            Debug.Log($"Entered {_debugName} State!");
+        }
+
+        public override void OnExit()
+        {
+            _orb.ResetState();
+            Debug.Log($"Exited {_debugName} State!");
+        }
+
+        public override void UpdateLogic()
+        {
+            
+        }
+
+        public override void UpdatePhysics()
+        {
+            
+        }
+    }
 }
