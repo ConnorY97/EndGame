@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class Golem : MonoBehaviour, IRequireInput
 {
-    enum STATE { DORMANT, ACTIVE }
-
     [SerializeField] private float _speed;
     [SerializeField] private float _angularSpeed;
     private IMovement _movement;
@@ -15,7 +13,7 @@ public class Golem : MonoBehaviour, IRequireInput
     private Vector3 _right;
     private Vector3 _heading;
 
-    private STATE _currentState;
+    private FSM.FSM _fsm;
 
     private Rigidbody _rb;
     private Animator _anim;
@@ -47,6 +45,11 @@ public class Golem : MonoBehaviour, IRequireInput
             Orientate();
     }
 
+    private void InitialiseFSM()
+    {
+
+    }
+
     private void ComputeAxes()
     {
         float _angle = _cameraTransform.rotation.eulerAngles.y;
@@ -62,15 +65,6 @@ public class Golem : MonoBehaviour, IRequireInput
         _thisTransform.rotation = Quaternion.Slerp(_thisTransform.rotation, targetRotation, _angularSpeed * Time.fixedDeltaTime);
     }
 
-    public void Toggle(bool state)
-    {
-        if (state)
-            _currentState = STATE.ACTIVE;
-        else
-            _currentState = STATE.DORMANT;
-
-        _CMVirtualCamera.SetActive(state);
-    }
 
     // Interfaces
     public void SetInputData(InputData data)

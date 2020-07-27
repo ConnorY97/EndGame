@@ -1,8 +1,5 @@
-﻿using Cinemachine;
-using FSM;
-using OrbStates;
+﻿using OrbStates;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Orb : MonoBehaviour, IRequireInput
 {
@@ -24,9 +21,7 @@ public class Orb : MonoBehaviour, IRequireInput
     private Rigidbody _rb;
     private Transform _thisTransform;
     private Transform _cameraTransform;
-    [SerializeField] private CinemachineFreeLook _CM_VirtualCamera;
-
-    private bool _mounted;
+    [SerializeField] private GameObject _CMVirtualCamera;
 
     private FSM.FSM _fsm;
 
@@ -51,8 +46,8 @@ public class Orb : MonoBehaviour, IRequireInput
     {
         ComputeAxes();
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            _mounted = !_mounted;
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    _mounted = !_mounted;
 
         _fsm.HandleTransitions();
         _fsm.UpdateLogic();
@@ -72,37 +67,37 @@ public class Orb : MonoBehaviour, IRequireInput
         FSM.State rollingState = new RollingState(this, groundedSuperState);
         FSM.State mountedState = new MountedState(this, null);
 
-        FSM.Condition isIdle = new Condition(() =>
+        FSM.Condition isIdle = new FSM.Condition(() =>
         {
             return _currentHeading == Vector3.zero;
         });
 
-        FSM.Condition isRolling = new Condition(() =>
+        FSM.Condition isRolling = new FSM.Condition(() =>
         {
             return _currentHeading != Vector3.zero;
         });
 
-        FSM.Condition isMounted = new Condition(() =>
-        {
-            return _mounted;
-        });
+        //FSM.Condition isMounted = new Condition(() =>
+        //{
+        //    return _mounted;
+        //});
 
-        FSM.Condition unMounted = new Condition(() =>
-        {
-            return !_mounted;
-        });
+        //FSM.Condition unMounted = new Condition(() =>
+        //{
+        //    return !_mounted;
+        //});
 
-        FSM.Transition groundedToMounted = new Transition(mountedState, isMounted);
-        FSM.Transition groundedToIdle = new Transition(idleState, isIdle);
-        FSM.Transition groundedToRolling = new Transition(rollingState, isRolling);
+        //FSM.Transition groundedToMounted = new Transition(mountedState, isMounted);
+        FSM.Transition groundedToIdle = new FSM.Transition(idleState, isIdle);
+        FSM.Transition groundedToRolling = new FSM.Transition(rollingState, isRolling);
 
-        FSM.Transition mountedToGrounded = new Transition(groundedSuperState, unMounted);
+        //FSM.Transition mountedToGrounded = new Transition(groundedSuperState, unMounted);
 
-        _fsm.AddState(groundedSuperState, groundedToMounted, groundedToIdle, groundedToRolling);
+        _fsm.AddState(groundedSuperState, /*groundedToMounted,*/ groundedToIdle, groundedToRolling);
         _fsm.AddState(idleState);
         _fsm.AddState(rollingState);
 
-        _fsm.AddState(mountedState, mountedToGrounded);
+        //_fsm.AddState(mountedState, mountedToGrounded);
 
         _fsm.SetDefaultState(groundedSuperState);
     }
