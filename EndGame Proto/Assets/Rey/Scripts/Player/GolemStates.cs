@@ -3,153 +3,87 @@ using UnityEngine;
 
 namespace GolemStates
 {
-	public class GroundedState : FSM.State
-	{
-		public GroundedState(Golem golem, FSM.State superState) : base(superState, "Grounded State")
-		{
-
-		}
-
-		public override void OnEnter()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void OnExit()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void UpdateLogic()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void HandleTransitions()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void UpdatePhysics()
-		{
-			throw new System.NotImplementedException();
-		}
-	}
-
-	public class InteractingSuperState : FSM.State
-	{
-		public InteractingSuperState(Golem golem, FSM.State superState) : base(superState, "Interacting State")
-		{
-
-		}
-
-		public override void OnEnter()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void OnExit()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void UpdateLogic()
-		{
-
-		}
-
-		public override void HandleTransitions()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void UpdatePhysics()
-		{
-			throw new System.NotImplementedException();
-		}
-	}
-
 	public class IdleState : FSM.State
 	{
-		public IdleState(Golem golem, FSM.State superState) : base(superState, "Idle State")
-		{
+		private Golem _golem;
 
+		public IdleState(Golem golem) : base("Idle State")
+		{
+			_golem = golem;
 		}
 
 		public override void OnEnter()
 		{
-			throw new System.NotImplementedException();
+			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
-			throw new System.NotImplementedException();
+			_golem.ResetState();
+			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
 		{
-			throw new System.NotImplementedException();
+			_golem.ResetState();
 		}
-
-        public override void HandleTransitions()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public override void UpdatePhysics()
 		{
-			throw new System.NotImplementedException();
+			
 		}
 	}
 
 	public class WalkingState : FSM.State
 	{
-		public WalkingState(Golem golem, FSM.State superState) : base(superState, "Walking State")
-		{
+		private Golem _golem;
 
+		public WalkingState(Golem golem) : base("Walking State")
+		{
+			_golem = golem;
 		}
 
 		public override void OnEnter()
 		{
-			throw new System.NotImplementedException();
+			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
-			throw new System.NotImplementedException();
+			_golem.ResetState();
+			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
 		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void HandleTransitions()
-		{
-			throw new System.NotImplementedException();
+			_golem.Move();
 		}
 
 		public override void UpdatePhysics()
 		{
-			throw new System.NotImplementedException();
+			_golem.Orientate();
 		}
 	}
 
-	public class LiftingState : InteractingSuperState
+	public class LiftingState : FSM.State
 	{
-		public LiftingState(Golem golem, FSM.State superState) : base(golem, superState)
-		{
+		private Golem _golem;
 
+		public LiftingState(Golem golem) : base("Lifting State")
+		{
+			_golem = golem;
 		}
 
 		public override void OnEnter()
 		{
-			throw new System.NotImplementedException();
+			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
-			throw new System.NotImplementedException();
+			_golem.StopLifting();
+			_golem.ResetState();
+			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -157,48 +91,40 @@ namespace GolemStates
 			
 		}
 
-		public override void HandleTransitions()
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public override void UpdatePhysics()
 		{
-			throw new System.NotImplementedException();
+			
 		}
 	}
 
 	public class PushingState : FSM.State
 	{
-		public PushingState(Golem golem, FSM.State superState) : base(superState, "Push State")
-		{
+		private Golem _golem;
 
+		public PushingState(Golem golem) : base("Pushing State")
+		{
+			_golem = golem;
 		}
 
 		public override void OnEnter()
 		{
-			throw new System.NotImplementedException();
+			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
-			throw new System.NotImplementedException();
+			_golem.ResetState();
+			_golem.StopPushing();
 		}
 
 		public override void UpdateLogic()
 		{
-			throw new System.NotImplementedException();
-		}
-
-		public override void HandleTransitions()
-		{
-			throw new System.NotImplementedException();
+			_golem.Push();
 		}
 
 		public override void UpdatePhysics()
 		{
-			throw new System.NotImplementedException();
+			
 		}
 	}
 }
-

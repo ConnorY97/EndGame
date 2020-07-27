@@ -13,7 +13,7 @@ public class Orb : MonoBehaviour, IRequireInput
     private float _angle;
     private Vector3 _forward;
     private Vector3 _right;
-    private Vector3 _currentHeading;
+    private Vector3 _currentHeading; public Vector3 currentHeading => _currentHeading;
 
     private Golem _currentGolem;
     [SerializeField] private float _golemSearchRadius;
@@ -47,9 +47,6 @@ public class Orb : MonoBehaviour, IRequireInput
     {
         ComputeAxes();
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    _mounted = !_mounted;
-
         _fsm.HandleTransitions();
         _fsm.UpdateLogic();
     }
@@ -63,44 +60,21 @@ public class Orb : MonoBehaviour, IRequireInput
     {
         _fsm = new FSM.FSM();
 
-        FSM.State groundedSuperState = new GroundedState(this, null);
-        FSM.State idleState = new IdleState(this, groundedSuperState);
-        FSM.State rollingState = new RollingState(this, groundedSuperState);
-        FSM.State mountedState = new MountedState(this, null);
+        State idleState = new OrbStates.IdleState(this);
+        State rollingState = new OrbStates.RollingState(this);
+        State mountedState = new OrbStates.MountedState(this);
 
-        //FSM.Condition isIdle = new FSM.Condition(() =>
-        //{
-        //    return _currentHeading == Vector3.zero;
-        //});
+        _fsm.AddTransition(idleState, rollingState, () => 
+        {
+            return _currentHeading != Vector3.zero;
+        });
 
-        //FSM.Condition isRolling = new FSM.Condition(() =>
-        //{
-        //    return _currentHeading != Vector3.zero;
-        //});
+        _fsm.AddTransition(rollingState, idleState, () =>
+        {
+            return _currentHeading == Vector3.zero;
+        });
 
-        //FSM.Condition isMounted = new Condition(() =>
-        //{
-        //    return _mounted;
-        //});
-
-        //FSM.Condition unMounted = new Condition(() =>
-        //{
-        //    return !_mounted;
-        //});
-
-        //FSM.Transition groundedToMounted = new Transition(mountedState, isMounted);
-        //FSM.Transition groundedToIdle = new FSM.Transition(idleState, isIdle);
-        //FSM.Transition groundedToRolling = new FSM.Transition(rollingState, isRolling);
-
-        //FSM.Transition mountedToGrounded = new Transition(groundedSuperState, unMounted);
-
-        //_fsm.AddState(groundedSuperState, /*groundedToMounted,*/ groundedToIdle, groundedToRolling);
-        //_fsm.AddState(idleState);
-        //_fsm.AddState(rollingState);
-
-        //_fsm.AddState(mountedState, mountedToGrounded);
-
-        //_fsm.SetDefaultState(groundedSuperState);
+        _fsm.SetDefaultState(idleState);
     }
 
     private void ComputeAxes()
