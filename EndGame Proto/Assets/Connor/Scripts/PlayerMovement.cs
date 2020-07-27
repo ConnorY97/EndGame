@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 
-public enum STATE
+public enum State
 {
 	FREE,
 	PUSHING,
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 	private bool _pushing = false;
 	private bool _lifting = false; 
 
-	private STATE _currentState = STATE.FREE; 
+	private State _currentState = State.FREE; 
 
 	private Transform _cameraTransform;
 	private Vector3 _heading; 
