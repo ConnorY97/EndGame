@@ -1,5 +1,6 @@
 ﻿using OrbStates;
 using UnityEngine;
+using FSM;
 
 public class Orb : MonoBehaviour, IRequireInput
 {
@@ -67,15 +68,15 @@ public class Orb : MonoBehaviour, IRequireInput
         FSM.State rollingState = new RollingState(this, groundedSuperState);
         FSM.State mountedState = new MountedState(this, null);
 
-        FSM.Condition isIdle = new FSM.Condition(() =>
-        {
-            return _currentHeading == Vector3.zero;
-        });
+        //FSM.Condition isIdle = new FSM.Condition(() =>
+        //{
+        //    return _currentHeading == Vector3.zero;
+        //});
 
-        FSM.Condition isRolling = new FSM.Condition(() =>
-        {
-            return _currentHeading != Vector3.zero;
-        });
+        //FSM.Condition isRolling = new FSM.Condition(() =>
+        //{
+        //    return _currentHeading != Vector3.zero;
+        //});
 
         //FSM.Condition isMounted = new Condition(() =>
         //{
@@ -88,18 +89,18 @@ public class Orb : MonoBehaviour, IRequireInput
         //});
 
         //FSM.Transition groundedToMounted = new Transition(mountedState, isMounted);
-        FSM.Transition groundedToIdle = new FSM.Transition(idleState, isIdle);
-        FSM.Transition groundedToRolling = new FSM.Transition(rollingState, isRolling);
+        //FSM.Transition groundedToIdle = new FSM.Transition(idleState, isIdle);
+        //FSM.Transition groundedToRolling = new FSM.Transition(rollingState, isRolling);
 
         //FSM.Transition mountedToGrounded = new Transition(groundedSuperState, unMounted);
 
-        _fsm.AddState(groundedSuperState, /*groundedToMounted,*/ groundedToIdle, groundedToRolling);
-        _fsm.AddState(idleState);
-        _fsm.AddState(rollingState);
+        //_fsm.AddState(groundedSuperState, /*groundedToMounted,*/ groundedToIdle, groundedToRolling);
+        //_fsm.AddState(idleState);
+        //_fsm.AddState(rollingState);
 
         //_fsm.AddState(mountedState, mountedToGrounded);
 
-        _fsm.SetDefaultState(groundedSuperState);
+        //_fsm.SetDefaultState(groundedSuperState);
     }
 
     private void ComputeAxes()
