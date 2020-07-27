@@ -41,8 +41,7 @@ public class Golem : MonoBehaviour, IRequireInput
 
     private void FixedUpdate()
     {
-        if (_currentState == STATE.ACTIVE)
-            Orientate();
+        Orientate();
     }
 
     private void InitialiseFSM()
