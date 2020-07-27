@@ -22,13 +22,13 @@ namespace FSM
 			MoveTo(defaultState);
 		}
 
-		public void AddState(State state, params Transition[] transitions)
+		public void AddState(State state)
 		{
 			if (_transitionsDict.ContainsKey(state))
 				return;
 
 			_states.Add(state);
-			_transitionsDict.Add(state, transitions);
+			//_transitionsDict.Add(state, transitions);
 		}
 
 		private void MoveTo(State state)
@@ -39,12 +39,13 @@ namespace FSM
 			_currentState = state;
 			_currentStateTransitions = _transitionsDict[_currentState];
 
-			if (_currentState.superState != null)
-				_superStateTransitions = _transitionsDict[_currentState.superState];
-			else
-				_superStateTransitions = null;
+			//if (_currentState.superState != null)
+			//	_superStateTransitions = _transitionsDict[_currentState.superState];
+			//else
+			//	_superStateTransitions = null;
 
 			_currentState.OnEnter();
+			//HandleTransitions();
 		}
 
 		public void HandleTransitions()
@@ -75,15 +76,15 @@ namespace FSM
 
 		public void UpdateLogic()
 		{
-			if (_currentState.superState != null)
-				_currentState.superState.UpdateLogic();
+			//if (_currentState.superState != null)
+			//	_currentState.superState.UpdateLogic();
 			_currentState.UpdateLogic();
 		}
 
 		public void UpdatePhysics()
 		{
-			if (_currentState.superState != null)
-				_currentState.superState.UpdatePhysics();
+			//if (_currentState.superState != null)
+			//	_currentState.superState.UpdatePhysics();
 			_currentState.UpdatePhysics();
 		}
 

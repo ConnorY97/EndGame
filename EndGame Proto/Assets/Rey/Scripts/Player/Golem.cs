@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
+using GolemStates;
 
 public class Golem : MonoBehaviour, IRequireInput
 {
@@ -24,8 +25,8 @@ public class Golem : MonoBehaviour, IRequireInput
 	private Transform _cameraTransform;
 	[SerializeField] private GameObject _CMVirtualCamera;
 
-	private bool _isPushing;
-	private bool _isLifting; 
+	private bool _pushingInput;
+	private bool _liftingInput;
 
 	private void Awake()
 	{
@@ -46,9 +47,9 @@ public class Golem : MonoBehaviour, IRequireInput
 		_anim.SetFloat("Speed", _rb.velocity.sqrMagnitude);
 
 		if (Input.GetKeyDown(KeyCode.E))		
-			_isPushing = !_isPushing;
+			_pushingInput = !_pushingInput;
 		if (Input.GetKeyDown(KeyCode.Q))
-			_isLifting = !_isLifting; 
+			_liftingInput = !_liftingInput; 
 
 	}
 
@@ -84,7 +85,6 @@ public class Golem : MonoBehaviour, IRequireInput
 		_inputData = data;
 	}
 
-
 	private void InitaliseStateMachine()
 	{
 		_fsm = new FSM.FSM();
@@ -98,30 +98,30 @@ public class Golem : MonoBehaviour, IRequireInput
 		GolemStates.LiftingState liftingState = new GolemStates.LiftingState(this, interactingState);
 		GolemStates.PushingState pushState = new GolemStates.PushingState(this, interactingState);
 		//Conditions------------------------------------------------------------------------------------
-		FSM.Condition isIdle = new FSM.Condition(() =>
-		{
-			return _heading == Vector3.zero;
-		});
-		FSM.Condition isWalking = new FSM.Condition(() =>
-		{
-			return _heading != Vector3.zero;
-		});
-		FSM.Condition pushingInput = new FSM.Condition(() =>
-		{
-			return _isPushing;
-		});
-		FSM.Condition liftingInput = new FSM.Condition(() =>
-		{
-			return _isLifting;
-		});
-		//Defining transitions--------------------------------------------------------------------------
-		//grounded super state
-		FSM.Transition groundedToIdle = new FSM.Transition(idleState, new FSM.Condition, true);
-		FSM.Transition groundedToWalking = new FSM.Transition(walkingState, isIdle);
-		//grounded to interacting 
-		FSM.Transition groundedToInteracting = new FSM.Transition(interactingState, { pushingInput, liftingInput });
-		FSM.Transition interactingToGrounded = new FSM.Transition(groundedState, pushingInput, liftingInput); 
-	}
+		//FSM.Condition isIdle = new FSM.Condition(() =>
+		//{
+		//	return _heading == Vector3.zero;
+		//});
+		//FSM.Condition isWalking = new FSM.Condition(() =>
+		//{
+		//	return _heading != Vector3.zero;
+		//});
+		//FSM.Condition canPush = new FSM.Condition(() =>
+		//{
+		//	return _canPush;
+		//});
+		//FSM.Condition liftingInput = new FSM.Condition(() =>
+		//{
+		//	return _liftingInput;
+		//});
 
+  //      //Defining transitions--------------------------------------------------------------------------
+  //      //grounded super state
 
+  //      FSM.Transition groundedToIdle = new FSM.Transition(idleState, isIdle);
+  //      FSM.Transition groundedToWalking = new FSM.Transition(walkingState, isWalking);
+  //      //grounded to interacting 
+  //      FSM.Transition groundedToInteracting = new FSM.Transition(interactingState, canPush);
+  //      FSM.Transition interactingToGrounded = new FSM.Transition(groundedState, pushingInput, liftingInput);
+    }
 }
