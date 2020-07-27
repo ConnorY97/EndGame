@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class Golem : MonoBehaviour, IRequireInput
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private float _angularSpeed;
+    [SerializeField] private float _speed = 0;
+    [SerializeField] private float _angularSpeed = 0;
     private IMovement _movement;
 
     private InputData _inputData;
