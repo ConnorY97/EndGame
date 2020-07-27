@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+//using System.Numerics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -16,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float _speed = 0;
 	[SerializeField] private float _angularSpeed = 0;
 	[SerializeField] private float _rayLength = 0;
+
+	public GameObject handPosition; 
 
 	private Rigidbody _rb;
 	private Animator _animator; 
@@ -54,7 +57,6 @@ public class PlayerMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
 		_rayPos = transform.position + new Vector3(0, 0.25f, 0);
 
 		float movementHorizontal = Input.GetAxis("Horizontal");
@@ -68,62 +70,17 @@ public class PlayerMovement : MonoBehaviour
 
 		_heading = _input.normalized.x * _right + _input.normalized.z * _forward;
 
-		RaycastHit hit;
-
-		Debug.DrawRay(_rayPos, _forward * _rayLength, Color.white);
+		//RaycastHit hit;
 		//Pushing 
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			if (_lifting == false)
-			{
-				if (_pushing == false)
-				{
-					if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
-					{
-						_heldObject = hit.collider.GetComponent<Rigidbody>();
-						_heldObject.isKinematic = false;
-						_heldObject.GetComponent<FixedJoint>().connectedBody = _rb;
-						_heldObjectNormal = hit.normal;
-						_currentState = STATE.PUSHING;
-						_pushing = true;
-					}
-				}
-				else if (_pushing == true)
-				{
-					_heldObject.GetComponent<FixedJoint>().connectedBody = null;
-					_heldObject.isKinematic = true;
-					//_sj.connectedBody = null; 
-					_heldObject.transform.SetParent(null);
-					_pushing = false;
-					_currentState = STATE.FREE;
-				}
-			}
+			Push(); 
 		}
 
 		//Lifting 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			if (_pushing == false)
-			{
-				if (_lifting == false)
-				{
-					if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
-					{
-						_heldObject = hit.collider.GetComponent<Rigidbody>();
-						_heldOjectStartPosition = _heldObject.GetComponent<Transform>().position;
-						_heldObject.GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-						_currentState = STATE.LIFTING;
-						_lifting = true;
-					}
-				}
-				else if (_lifting == true)
-				{
-					_lifting = false;
-					_heldObject.GetComponent<Transform>().position = _heldOjectStartPosition;
-					_currentState = STATE.FREE;
-				}
-			}
-
+			Lift(); 
 		}
 
 		switch (_currentState)
@@ -134,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
 					transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _angularSpeed * Time.fixedDeltaTime);
 					_rb.constraints = RigidbodyConstraints.FreezeRotation;
 					_rb.velocity = _heading * _speed;
-					//_sj.spring = 0;
 					break;
 				}
 			case STATE.PUSHING:
@@ -149,11 +105,71 @@ public class PlayerMovement : MonoBehaviour
 					break;
 				}
 		}
+
 		//Animation
 		_animator.SetFloat("Speed", _rb.velocity.magnitude);
 		_animator.SetBool("Pushing", _pushing);
 		_animator.SetBool("Lifting", _lifting); 
 		_animator.SetFloat("Direction", Mathf.RoundToInt(Vector3.Dot(_rb.velocity.normalized, transform.forward)));
-		Debug.Log(Vector3.Dot(_rb.velocity.normalized, transform.forward));
+	}
+
+	/// <summary>
+	/// Raycasting for an object to be set to the _heldObject,
+	///	then allows for the object to be moved around the scene on a single axis 
+	/// </summary>
+	public void Push()
+	{
+		RaycastHit hit;
+		if (_lifting == false)
+		{
+			if (_pushing == false)
+			{
+				if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
+				{
+					_heldObject = hit.collider.GetComponent<Rigidbody>();
+					Vector3 startPos = _heldObject.transform.position;
+					startPos.y = transform.position.y;
+					_heldObject.isKinematic = false;
+					_heldObjectNormal = hit.normal;
+					_rb.transform.position = startPos - (_heldObjectNormal * -1.2f);
+					transform.rotation = Quaternion.LookRotation(-_heldObjectNormal);
+					_heldObject.GetComponent<FixedJoint>().connectedBody = _rb;
+					_pushing = true;
+					_currentState = STATE.PUSHING;
+				}
+			}
+			else if (_pushing == true)
+			{
+				_heldObject.GetComponent<FixedJoint>().connectedBody = null;
+				_heldObject.isKinematic = true;
+				_pushing = false;
+				_currentState = STATE.FREE;
+			}
+		}
+	}
+
+	public void Lift()
+	{
+		RaycastHit hit;
+		if (_pushing == false)
+		{
+			if (_lifting == false)
+			{
+				if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
+				{
+					_heldObject = hit.collider.GetComponent<Rigidbody>();
+					_heldOjectStartPosition = _heldObject.GetComponent<Transform>().position;
+					_heldObject.transform.position = this.transform.position + new Vector3(0, 2.5f, 0);
+					_currentState = STATE.LIFTING;
+					_lifting = true;
+				}
+			}
+			else if (_lifting == true)
+			{
+				_lifting = false;
+				_heldObject.GetComponent<Transform>().position = _heldOjectStartPosition;
+				_currentState = STATE.FREE;
+			}
+		}
 	}
 }
