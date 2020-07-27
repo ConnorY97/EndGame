@@ -25,15 +25,20 @@ namespace GolemStates
 			throw new System.NotImplementedException();
 		}
 
+		public override void HandleTransitions()
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public override void UpdatePhysics()
 		{
 			throw new System.NotImplementedException();
 		}
 	}
 
-	public class InteractingState : FSM.State
+	public class InteractingSuperState : FSM.State
 	{
-		public InteractingState(Golem golem, FSM.State superState) : base(superState, "Interacting State")
+		public InteractingSuperState(Golem golem, FSM.State superState) : base(superState, "Interacting State")
 		{
 
 		}
@@ -51,6 +56,11 @@ namespace GolemStates
 		public override void UpdateLogic()
 		{
 
+		}
+
+		public override void HandleTransitions()
+		{
+			throw new System.NotImplementedException();
 		}
 
 		public override void UpdatePhysics()
@@ -81,7 +91,12 @@ namespace GolemStates
 			throw new System.NotImplementedException();
 		}
 
-		public override void UpdatePhysics()
+        public override void HandleTransitions()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UpdatePhysics()
 		{
 			throw new System.NotImplementedException();
 		}
@@ -109,15 +124,20 @@ namespace GolemStates
 			throw new System.NotImplementedException();
 		}
 
+		public override void HandleTransitions()
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public override void UpdatePhysics()
 		{
 			throw new System.NotImplementedException();
 		}
 	}
 
-	public class LiftingState : FSM.State
+	public class LiftingState : InteractingSuperState
 	{
-		public LiftingState(Golem golem, FSM.State superState) : base(superState, "Carrying State")
+		public LiftingState(Golem golem, FSM.State superState) : base(golem, superState)
 		{
 
 		}
@@ -133,6 +153,11 @@ namespace GolemStates
 		}
 
 		public override void UpdateLogic()
+		{
+			
+		}
+
+		public override void HandleTransitions()
 		{
 			throw new System.NotImplementedException();
 		}
@@ -161,6 +186,11 @@ namespace GolemStates
 		}
 
 		public override void UpdateLogic()
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public override void HandleTransitions()
 		{
 			throw new System.NotImplementedException();
 		}

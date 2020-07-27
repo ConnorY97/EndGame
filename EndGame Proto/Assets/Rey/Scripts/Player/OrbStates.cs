@@ -26,6 +26,11 @@ namespace OrbStates
             
         }
 
+        public override void HandleTransitions()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void UpdatePhysics()
         {
             
@@ -55,6 +60,11 @@ namespace OrbStates
         public override void UpdateLogic()
         {
             
+        }
+
+        public override void HandleTransitions()
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void UpdatePhysics()
@@ -88,6 +98,11 @@ namespace OrbStates
             _orb.Move();
         }
 
+        public override void HandleTransitions()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void UpdatePhysics()
         {
             _orb.Orientate();
@@ -117,6 +132,11 @@ namespace OrbStates
         public override void UpdateLogic()
         {
             
+        }
+
+        public override void HandleTransitions()
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void UpdatePhysics()

@@ -90,13 +90,13 @@ public class Golem : MonoBehaviour, IRequireInput
 		_fsm = new FSM.FSM();
 
 		//Initialising super states---------------------------------------------------------------------
-		GolemStates.GroundedState groundedState = new GolemStates.GroundedState(this, null);
-		GolemStates.InteractingState interactingState = new GolemStates.InteractingState(this, null);
-		//Initialising sub states-----------------------------------------------------------------------
-		GolemStates.IdleState idleState = new GolemStates.IdleState(this, groundedState);
-		GolemStates.WalkingState walkingState = new GolemStates.WalkingState(this, groundedState);
-		GolemStates.LiftingState liftingState = new GolemStates.LiftingState(this, interactingState);
-		GolemStates.PushingState pushState = new GolemStates.PushingState(this, interactingState);
+		//GolemStates.GroundedState groundedState = new GolemStates.GroundedState(this, null);
+		//GolemStates.InteractingState interactingState = new GolemStates.InteractingState(this, null);
+		////Initialising sub states-----------------------------------------------------------------------
+		//GolemStates.IdleState idleState = new GolemStates.IdleState(this, groundedState);
+		//GolemStates.WalkingState walkingState = new GolemStates.WalkingState(this, groundedState);
+		//GolemStates.LiftingState liftingState = new GolemStates.LiftingState(this, interactingState);
+		//GolemStates.PushingState pushState = new GolemStates.PushingState(this, interactingState);
 		//Conditions------------------------------------------------------------------------------------
 		//FSM.Condition isIdle = new FSM.Condition(() =>
 		//{

@@ -18,6 +18,7 @@
         public abstract void OnEnter();
         public abstract void OnExit();
         public abstract void UpdateLogic();
+        public abstract void HandleTransitions();
         public abstract void UpdatePhysics();
     }
 }
