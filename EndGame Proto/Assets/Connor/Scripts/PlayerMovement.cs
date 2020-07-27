@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 
-public enum State
+public enum STATE
 {
 	FREE,
 	PUSHING,
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 	private bool _pushing = false;
 	private bool _lifting = false; 
 
-	private State _currentState = State.FREE; 
+	private STATE _currentState = STATE.FREE; 
 
 	private Transform _cameraTransform;
 	private Vector3 _heading; 
@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Raycasting for an object to be set to the _heldObject,
+	/// Ray casting for an object to be set as _heldObject,
 	///	then allows for the object to be moved around the scene on a single axis 
 	/// </summary>
 	public void Push()

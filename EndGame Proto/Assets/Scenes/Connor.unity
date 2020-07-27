@@ -121,6 +121,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &208276278 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -397688730508931025, guid: 392c19e2368295a4187fd32dc9139220,
+    type: 3}
+  m_PrefabInstance: {fileID: 1132569700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &447142063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -439,6 +445,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 75.874, y: 0, z: 0}
+--- !u!1 &1047703834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047703835}
+  m_Layer: 0
+  m_Name: HandPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1047703835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047703834}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.616, y: 0.389, z: -0.023}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 208276278}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1132569700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -547,12 +583,12 @@ PrefabInstance:
     - target: {fileID: 3828405469566428720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000004282396
+      value: -0.0000000046506377
       objectReference: {fileID: 0}
     - target: {fileID: 3828405469566428720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -4.096859e-10
+      value: 4.4491458e-10
       objectReference: {fileID: 0}
     - target: {fileID: 3828405469566428720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
@@ -733,6 +769,7 @@ MonoBehaviour:
   _speed: 5
   _angularSpeed: 5
   _rayLength: 0.45
+  handPosition: {fileID: 1047703834}
 --- !u!54 &1522787651
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1172,6 +1209,7 @@ MonoBehaviour:
   _speed: 5
   _angularSpeed: 5
   _rayLength: 0
+  handPosition: {fileID: 0}
 --- !u!1 &2041516472
 GameObject:
   m_ObjectHideFlags: 0
