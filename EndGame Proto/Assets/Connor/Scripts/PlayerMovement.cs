@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
 	private Animator _animator; 
 
 	private bool _pushing = false;
-	private bool _lifting = false; 
+	private bool _lifting = false;
+
 
 	private STATE _currentState = STATE.FREE; 
 
@@ -35,14 +36,13 @@ public class PlayerMovement : MonoBehaviour
 	private Vector3 _input;
 	private float _angle;
 
-	private Rigidbody _heldObject;
-	private Vector3 _heldObjectNormal;
-	private Vector3 _heldOjectStartPosition; 
+	private Rigidbody _interactedObject;
+	private Vector3 _ioNormal;
+	private Vector3 _ioStartPosition; 
 
 	private int _layerMask = 1 << 8;
 
-	private Vector3 _rayPos; 
-
+	private Vector3 _rayPos;
 
 
 
@@ -83,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
 			Lift(); 
 		}
 
+
 		switch (_currentState)
 		{
 			case STATE.FREE:
@@ -95,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
 				}
 			case STATE.PUSHING:
 				{
-					_rb.velocity = _input.z * -_heldObjectNormal * _speed;
+					_rb.velocity = _input.z * -_ioNormal * _speed;
 					_rb.constraints = RigidbodyConstraints.FreezeRotation;
 					break;
 				}
@@ -126,28 +127,35 @@ public class PlayerMovement : MonoBehaviour
 			{
 				if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
 				{
-					_heldObject = hit.collider.GetComponent<Rigidbody>();
-					Vector3 startPos = _heldObject.transform.position;
-					startPos.y = transform.position.y;
-					_heldObject.isKinematic = false;
-					_heldObjectNormal = hit.normal;
-					_rb.transform.position = startPos - (_heldObjectNormal * -1.2f);
-					transform.rotation = Quaternion.LookRotation(-_heldObjectNormal);
-					_heldObject.GetComponent<FixedJoint>().connectedBody = _rb;
+					_interactedObject = hit.collider.GetComponent<Rigidbody>();
+					_ioStartPosition = _interactedObject.transform.position;
+					_ioStartPosition.y = transform.position.y;
+					_interactedObject.isKinematic = false;
+					_ioNormal = hit.normal;
+					_rb.transform.position = _ioStartPosition - (_ioNormal * -1.2f);
+					transform.rotation = Quaternion.LookRotation(-_ioNormal);
+					_interactedObject.GetComponent<FixedJoint>().connectedBody = _rb;
 					_pushing = true;
 					_currentState = STATE.PUSHING;
 				}
 			}
 			else if (_pushing == true)
 			{
-				_heldObject.GetComponent<FixedJoint>().connectedBody = null;
-				_heldObject.isKinematic = true;
+				_interactedObject.GetComponent<FixedJoint>().connectedBody = null;
+				_interactedObject.isKinematic = true;
+				_interactedObject = null;
+				_ioNormal = Vector3.zero;
+				_ioStartPosition = Vector3.zero; 
 				_pushing = false;
 				_currentState = STATE.FREE;
 			}
 		}
 	}
 
+	/// <summary>
+	/// Ray casting for an object to be set as _heldobject
+	/// then allows for the object to be lifted into the air 
+	/// </summary>
 	public void Lift()
 	{
 		RaycastHit hit;
@@ -157,9 +165,9 @@ public class PlayerMovement : MonoBehaviour
 			{
 				if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
 				{
-					_heldObject = hit.collider.GetComponent<Rigidbody>();
-					_heldOjectStartPosition = _heldObject.GetComponent<Transform>().position;
-					_heldObject.transform.position = this.transform.position + new Vector3(0, 2.5f, 0);
+					_interactedObject = hit.collider.GetComponent<Rigidbody>();
+					_ioStartPosition = _interactedObject.GetComponent<Transform>().position;
+					_interactedObject.transform.position = this.transform.position + new Vector3(0, 2.5f, 0);
 					_currentState = STATE.LIFTING;
 					_lifting = true;
 				}
@@ -167,9 +175,13 @@ public class PlayerMovement : MonoBehaviour
 			else if (_lifting == true)
 			{
 				_lifting = false;
-				_heldObject.GetComponent<Transform>().position = _heldOjectStartPosition;
+				_interactedObject.GetComponent<Transform>().position = _ioStartPosition;
+				_interactedObject = null;
+				_ioStartPosition = Vector3.zero; 
 				_currentState = STATE.FREE;
 			}
 		}
 	}
+
+
 }
