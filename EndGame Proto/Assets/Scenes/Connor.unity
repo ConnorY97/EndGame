@@ -410,12 +410,12 @@ PrefabInstance:
     - target: {fileID: 6067826184032874588, guid: 4af57b1c500a9364c8e788310a807446,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -4.2793507e-16
+      value: 4.2793507e-16
       objectReference: {fileID: 0}
     - target: {fileID: 6067826184032874588, guid: 4af57b1c500a9364c8e788310a807446,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 4.878878e-17
+      value: -4.878878e-17
       objectReference: {fileID: 0}
     - target: {fileID: 6067826184032874588, guid: 4af57b1c500a9364c8e788310a807446,
         type: 3}
@@ -576,12 +576,12 @@ PrefabInstance:
     - target: {fileID: 3828405469566428720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000000042820445
+      value: 0.00000000410357
       objectReference: {fileID: 0}
     - target: {fileID: 3828405469566428720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 4.096522e-10
+      value: -3.9257797e-10
       objectReference: {fileID: 0}
     - target: {fileID: 3828405469566428720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
@@ -611,12 +611,12 @@ PrefabInstance:
     - target: {fileID: 3828405469912120135, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -4.3265585e-16
+      value: 4.3265585e-16
       objectReference: {fileID: 0}
     - target: {fileID: 3828405469912120135, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 9.0196244e-17
+      value: -9.0196244e-17
       objectReference: {fileID: 0}
     - target: {fileID: 3828405469912120135, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
@@ -854,12 +854,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1277314921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e66ee09e3d6a2c448a0fd3cd02bd0760, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b0913dd33d03bb46b30486716ccb1d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionForce: 500
+  _explosionForce: 1000
+  _cloneLifeSpan: 3
   _boulder: {fileID: 3801043026978461856, guid: 3f010dbbe11188e48ac76ea0923a3511,
     type: 3}
+  _cloneAmount: 0
 --- !u!4 &1283727365 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7849066908595861660, guid: 6651396cc0bf2e8489ff3f6b0fffdc5f,
@@ -1496,6 +1498,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Golem_Blockout
+      objectReference: {fileID: 0}
+    - target: {fileID: 3592579847240216749, guid: a1b6a4463e5e49442bb60810be89845d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Golem
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1b6a4463e5e49442bb60810be89845d, type: 3}
