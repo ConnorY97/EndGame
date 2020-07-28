@@ -13,7 +13,7 @@ public class VelocityBasedMovement : IMovement
 
     public void Move(Vector3 dir)
     {
-        _rb.velocity = dir * _speed;
+        _rb.velocity = new Vector3(dir.x * _speed, _rb.velocity.y, dir.z * _speed);
     }
 
     public void AddExternalForce(Vector3 force)
