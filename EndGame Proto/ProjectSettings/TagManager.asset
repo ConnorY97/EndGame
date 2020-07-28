@@ -7,6 +7,7 @@ TagManager:
   - VCam
   - PressurePlate
   - Interactable
+  - Boulder
   layers:
   - Default
   - TransparentFX
