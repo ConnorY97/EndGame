@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - VCam
+  - PressurePlate
+  - Interactable
+  - Boulder
   layers:
   - Default
   - TransparentFX
