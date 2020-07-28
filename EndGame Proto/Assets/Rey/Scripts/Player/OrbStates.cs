@@ -3,45 +3,11 @@ using UnityEngine;
 
 namespace OrbStates
 {
-    // Super-state for states involve being grounded.
-    public class GroundedState : FSM.State
-    {
-        public GroundedState(Orb orb, FSM.State superState) : base(superState, "Grounded State")
-        {
-
-        }
-
-        public override void OnEnter()
-        {
-            
-        }
-
-        public override void OnExit()
-        {
-            
-        }
-
-        public override void UpdateLogic()
-        {
-            
-        }
-
-        public override void HandleTransitions()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void UpdatePhysics()
-        {
-            
-        }
-    }
-
-    public class IdleState : FSM.State
+    public class IdleState : State
     {
         private Orb _orb;
 
-        public IdleState(Orb orb, FSM.State superState) : base(superState, "Idle")
+        public IdleState(Orb orb) : base("Idle State")
         {
             _orb = orb;
         }
@@ -59,12 +25,7 @@ namespace OrbStates
 
         public override void UpdateLogic()
         {
-            
-        }
 
-        public override void HandleTransitions()
-        {
-            throw new System.NotImplementedException();
         }
 
         public override void UpdatePhysics()
@@ -73,11 +34,11 @@ namespace OrbStates
         }
     }
 
-    public class RollingState : FSM.State
+    public class RollingState : State
     {
         private Orb _orb;
 
-        public RollingState(Orb orb, FSM.State superState) : base(superState, "Rolling")
+        public RollingState(Orb orb) : base("Rolling State")
         {
             _orb = orb;
         }
@@ -98,22 +59,17 @@ namespace OrbStates
             _orb.Move();
         }
 
-        public override void HandleTransitions()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void UpdatePhysics()
         {
             _orb.Orientate();
         }
     }
 
-    public class MountedState : FSM.State
+    public class MountedState : State
     {
         private Orb _orb;
 
-        public MountedState(Orb orb, FSM.State superState) : base(superState, "Mounted")
+        public MountedState(Orb orb) : base("Mounted State")
         {
             _orb = orb;
         }
@@ -132,11 +88,6 @@ namespace OrbStates
         public override void UpdateLogic()
         {
             
-        }
-
-        public override void HandleTransitions()
-        {
-            throw new System.NotImplementedException();
         }
 
         public override void UpdatePhysics()

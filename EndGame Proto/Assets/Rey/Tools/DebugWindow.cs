@@ -32,6 +32,7 @@ public class DebugWindow : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        _inspectFuncs = new List<InspectFunc>(20);
     }
 
     private void Start()
@@ -40,9 +41,7 @@ public class DebugWindow : MonoBehaviour
         _windowRect.size = new Vector2(_width, Screen.height - _margin * 2);
 
         _content = new GUIContent();
-        _inspectFuncs = new List<InspectFunc>(20);
     }
-
 
     private void OnGUI()
     {

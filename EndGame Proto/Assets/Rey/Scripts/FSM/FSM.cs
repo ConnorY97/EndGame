@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FSM
 {
 	public class FSM
 	{
-		private List<State> _states;
 		private State _currentState;
-		private Dictionary<State, Transition[]> _transitionsDict;
+		private Dictionary<State, List<Transition>> _transitions;
 
-		private Transition[] _currentStateTransitions; // The transitions being considered at a given moment.
-		private Transition[] _superStateTransitions;
+		private List<Transition> _currentTransitions; // The transitions being considered at a given moment.
 
 		public FSM()
 		{
-			_states = new List<State>();
-			_transitionsDict = new Dictionary<State, Transition[]>();
+			_transitions = new Dictionary<State, List<Transition>>();
 		}
 
 		public void SetDefaultState(State defaultState)
@@ -22,72 +20,62 @@ namespace FSM
 			MoveTo(defaultState);
 		}
 
-		public void AddState(State state)
-		{
-			if (_transitionsDict.ContainsKey(state))
-				return;
+		public void AddTransition(State from, State to, Func<bool> condition)
+        {
+			if (_transitions.TryGetValue(from, out var transitions) == false)
+            {
+                transitions = new List<Transition>();
+				_transitions[from] = transitions;
+            }
 
-			_states.Add(state);
-			//_transitionsDict.Add(state, transitions);
-		}
+			transitions.Add(new Transition(to, condition));
+        }
 
-		private void MoveTo(State state)
+		public void MoveTo(State state)
 		{
 			if (_currentState != null)
 				_currentState.OnExit();
 
 			_currentState = state;
-			_currentStateTransitions = _transitionsDict[_currentState];
-
-			//if (_currentState.superState != null)
-			//	_superStateTransitions = _transitionsDict[_currentState.superState];
-			//else
-			//	_superStateTransitions = null;
+			_currentTransitions = _transitions[_currentState];
 
 			_currentState.OnEnter();
-			//HandleTransitions();
 		}
 
 		public void HandleTransitions()
 		{
-			State dst = null;
-			for (int i = 0; i < _currentStateTransitions.Length; i++)
+			for (int i = 0; i < _currentTransitions.Count; i++)
 			{
-				dst = _currentStateTransitions[i].EvaluateTransition();
-
-				if (dst != null)
-					break;
-			}
-
-			if (dst == null)
-			{
-				for (int i = 0; i < _superStateTransitions.Length; i++)
+				if (_currentTransitions[i].condition())
 				{
-					dst = _superStateTransitions[i].EvaluateTransition();
-
-					if (dst != null)
-						break;
+					MoveTo(_currentTransitions[i].to);
+					return;
 				}
 			}
-
-			if (dst != null && dst != _currentState)
-				MoveTo(dst);
 		}
 
 		public void UpdateLogic()
 		{
-			//if (_currentState.superState != null)
-			//	_currentState.superState.UpdateLogic();
 			_currentState.UpdateLogic();
 		}
 
 		public void UpdatePhysics()
 		{
-			//if (_currentState.superState != null)
-			//	_currentState.superState.UpdatePhysics();
 			_currentState.UpdatePhysics();
 		}
 
 		public State GetCurrentState() => _currentState;
+
+		private class Transition
+		{
+            public State to;
+			public Func<bool> condition;
+
+			public Transition(State to, Func<bool> condition)
+			{
+				this.to = to;
+				this.condition = condition;
+			}
+		}
 	}
 }
