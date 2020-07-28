@@ -162,6 +162,8 @@ public class Golem : MonoBehaviour, IRequireInput
     {
         _blockJoint.connectedBody = null;
         _blockRigidbody.isKinematic = true;
+        _blockRigidbody = null;
+        _blockJoint = null;
     }
 
     public bool Lift()
