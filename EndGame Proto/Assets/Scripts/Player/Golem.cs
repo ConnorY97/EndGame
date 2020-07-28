@@ -19,6 +19,8 @@ public class Golem : MonoBehaviour, IRequireInput
     [SerializeField] private LayerMask _blockLayer;
     [SerializeField] private float _blockInteractionDistance;
     [SerializeField] private float _distFromBlock;
+    [SerializeField] private Transform _handJoint;
+    private Block _block;
     private Rigidbody _blockRigidbody;
     private FixedJoint _blockJoint;
     private Vector3 _blockNormal;
@@ -30,6 +32,7 @@ public class Golem : MonoBehaviour, IRequireInput
     private Transform _thisTransform;
     private Transform _cameraTransform;
     [SerializeField] private GameObject _CMVirtualCamera;
+    [SerializeField] private Rigidbody _emptyRb;
 
     private void Awake()
     {
@@ -96,7 +99,7 @@ public class Golem : MonoBehaviour, IRequireInput
         _fsm.AddTransition(idleState, liftingState, () =>
         {
             if (Input.GetKeyDown(KeyCode.Q))
-                return Lift();
+                return BeginLifting();
 
             return false;
         });
@@ -134,10 +137,11 @@ public class Golem : MonoBehaviour, IRequireInput
         RaycastHit hit;
         if (Physics.Raycast(_thisTransform.position + Vector3.up * 0.5f, _forwardRelativeToCamera, out hit, _blockInteractionDistance, _blockLayer))
         {
+            _block = hit.collider.GetComponent<Block>();
             _blockRigidbody = hit.collider.GetComponent<Rigidbody>();
             _blockJoint = hit.collider.GetComponent<FixedJoint>();
 
-            _blockRigidbody.isKinematic = false;
+            //_blockRigidbody.isKinematic = false;
             _blockNormal = hit.normal;
 
             Vector3 newGolemPos = _blockRigidbody.position + (_blockNormal * _distFromBlock);
@@ -155,25 +159,36 @@ public class Golem : MonoBehaviour, IRequireInput
 
     public void Push()
     {
-        _movement.Move(_inputData.normalisedInput.y * -_blockNormal);
+        _movement.Move(_inputData.normalisedInput.y * -_blockNormal / _block.mass);
     }
 
     public void StopPushing()
     {
-        _blockJoint.connectedBody = null;
-        _blockRigidbody.isKinematic = true;
+        _blockJoint.connectedBody = _emptyRb;
+        //_blockRigidbody.isKinematic = true;
+        _block = null;
         _blockRigidbody = null;
         _blockJoint = null;
     }
 
-    public bool Lift()
+    public bool BeginLifting()
     {
         RaycastHit hit;
         if (Physics.Raycast(_thisTransform.position + Vector3.up * 0.5f, _forwardRelativeToCamera, out hit, _blockInteractionDistance, _blockLayer))
         {
             _blockRigidbody = hit.collider.GetComponent<Rigidbody>();
             _blockInitialPos = _blockRigidbody.position;
-            _blockRigidbody.position = _thisTransform.position + new Vector3(0, 2.5f, 0);
+            _blockRigidbody.GetComponent<Collider>().enabled = false;
+
+            _blockNormal = hit.normal;
+
+            //Vector3 newGolemPos = _blockRigidbody.position + (_blockNormal * _distFromBlock);
+            //newGolemPos.y = _thisTransform.position.y;
+
+            //_thisTransform.position = newGolemPos;
+            //_thisTransform.rotation = Quaternion.LookRotation(-_blockNormal);
+
+            //_blockRigidbody.position = _thisTransform.position + new Vector3(0, 2.5f, 0);
 
             return true;
         }
@@ -181,14 +196,25 @@ public class Golem : MonoBehaviour, IRequireInput
         return false;
     }
 
+    public void Lift()
+    {
+        _blockRigidbody.position = _handJoint.position;
+    }
+
     public void StopLifting()
     {
         _blockRigidbody.position = _blockInitialPos;
+        _blockRigidbody.GetComponent<Collider>().enabled = true;
     }    
 
     public void ResetState()
     {
         _rb.velocity = Vector3.zero;
+    }
+
+    public void SetAnimatorBool(string name, bool value)
+    {
+        _anim.SetBool(name, value);
     }
 
     // Interfaces
