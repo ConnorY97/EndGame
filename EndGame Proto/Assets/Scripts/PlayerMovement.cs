@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.InteropServices;
+using UnityEngine;
 
 public enum STATE
 {
@@ -134,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
 				if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
 				{
 					_interactedObject = hit.collider.GetComponent<Rigidbody>();
+					_interactedObject.useGravity = false;
 					_ioStartPosition = _interactedObject.transform.position;
 					_ioStartPosition.y = transform.position.y;
 					_interactedObject.isKinematic = false;
@@ -142,13 +144,16 @@ public class PlayerMovement : MonoBehaviour
 					transform.rotation = Quaternion.LookRotation(-_ioNormal);
 					_interactedObject.GetComponent<FixedJoint>().connectedBody = _rb;
 					_pushing = true;
+					_interactedObject.GetComponent<InteractableCube>().SetIsInteractable(true); 
 					_currentState = STATE.PUSHING;
 				}
 			}
 			else if (_pushing == true)
 			{
 				_interactedObject.GetComponent<FixedJoint>().connectedBody = null;
+				_interactedObject.useGravity = true;
 				_interactedObject.isKinematic = true;
+				_interactedObject.GetComponent<InteractableCube>().SetIsInteractable(false);
 				_interactedObject = null;
 				_ioNormal = Vector3.zero;
 				_ioStartPosition = Vector3.zero; 
@@ -172,8 +177,10 @@ public class PlayerMovement : MonoBehaviour
 				if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
 				{
 					_interactedObject = hit.collider.GetComponent<Rigidbody>();
+					_interactedObject.useGravity = false;
 					_ioStartPosition = _interactedObject.GetComponent<Transform>().position;
 					_interactedObject.transform.position = this.transform.position + new Vector3(0, 2.5f, 0);
+					_interactedObject.GetComponent<InteractableCube>().SetIsInteractable(true);
 					_currentState = STATE.LIFTING;
 					_lifting = true;
 				}
@@ -181,7 +188,9 @@ public class PlayerMovement : MonoBehaviour
 			else if (_lifting == true)
 			{
 				_lifting = false;
+				_interactedObject.useGravity = true;
 				_interactedObject.GetComponent<Transform>().position = _ioStartPosition;
+				_interactedObject.GetComponent<InteractableCube>().SetIsInteractable(false);
 				_interactedObject = null;
 				_ioStartPosition = Vector3.zero; 
 				_currentState = STATE.FREE;
