@@ -6,7 +6,7 @@ public class Golem : MonoBehaviour, IRequireInput
 {
     [SerializeField] private float _speed = 0;
     [SerializeField] private float _angularSpeed = 0;
-    private IMovement _movement;
+    private IMovementController _movement;
 
     private InputData _inputData;
 
@@ -25,6 +25,8 @@ public class Golem : MonoBehaviour, IRequireInput
     private FixedJoint _blockJoint;
     private Vector3 _blockNormal;
     private Vector3 _blockInitialPos;
+
+    private bool _dormant = true;
 
     private Rigidbody _rb;
     private Animator _anim;
@@ -50,8 +52,8 @@ public class Golem : MonoBehaviour, IRequireInput
     {
         InitaliseFSM();
 
-        DebugWindow.Inspect(() => { return _fsm.GetCurrentState().debugName; });
-        DebugWindow.Inspect(() => { return _heading.ToString(); });
+        DebugWindow.Inspect(() => { return "Golem State: " + _fsm.GetCurrentState().debugName; });
+        DebugWindow.Inspect(() => { return "Golem Heading: " + _heading.ToString(); });
     }
 
     private void Update()
@@ -73,10 +75,14 @@ public class Golem : MonoBehaviour, IRequireInput
     {
         _fsm = new FSM.FSM();
 
+        State dormantState = new DormantState(this);
         State idleState = new IdleState(this);
         State walkingState = new WalkingState(this);
         State pushingState = new PushingState(this);
         State liftingState = new LiftingState(this);
+
+        _fsm.AddTransition(dormantState, idleState, () => { return !_dormant; });
+        _fsm.AddTransition(idleState, dormantState, () => { return _dormant; });
 
         _fsm.AddTransition(idleState, walkingState, () => { return _heading != Vector3.zero; });
         _fsm.AddTransition(walkingState, idleState, () => { return _heading == Vector3.zero; });
@@ -121,6 +127,19 @@ public class Golem : MonoBehaviour, IRequireInput
         _heading = _inputData.normalisedInput.x * _right + _inputData.normalisedInput.y * _forwardRelativeToCamera;
     }
 
+    public void Enter()
+    {
+        VirtualCameraManager.instance.ToggleVCam(_CMVirtualCamera);
+        _rb.isKinematic = false;
+        _dormant = false;
+    }
+
+    public void Exit()
+    {
+        _rb.isKinematic = true;
+        _dormant = true;
+    }
+
     public void Move()
     {
         _movement.Move(_heading);
@@ -141,7 +160,7 @@ public class Golem : MonoBehaviour, IRequireInput
             _blockRigidbody = hit.collider.GetComponent<Rigidbody>();
             _blockJoint = hit.collider.GetComponent<FixedJoint>();
 
-            //_blockRigidbody.isKinematic = false;
+            _blockRigidbody.isKinematic = false;
             _blockNormal = hit.normal;
 
             Vector3 newGolemPos = _blockRigidbody.position + (_blockNormal * _distFromBlock);
@@ -165,7 +184,7 @@ public class Golem : MonoBehaviour, IRequireInput
     public void StopPushing()
     {
         _blockJoint.connectedBody = _emptyRb;
-        //_blockRigidbody.isKinematic = true;
+        _blockRigidbody.isKinematic = true;
         _block = null;
         _blockRigidbody = null;
         _blockJoint = null;

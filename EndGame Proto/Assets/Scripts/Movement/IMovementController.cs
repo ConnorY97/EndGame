@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public interface IMovement
+public interface IMovementController
 {
     void Move(Vector3 dir);
     void AddForce(Vector3 force);

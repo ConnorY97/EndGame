@@ -6,7 +6,7 @@ public class Orb : MonoBehaviour, IRequireInput
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _angularSpeed;
-    private IMovement _movement;
+    private IMovementController _movement;
 
     private InputData _inputData;
 
@@ -15,9 +15,9 @@ public class Orb : MonoBehaviour, IRequireInput
     private Vector3 _right;
     private Vector3 _currentHeading; public Vector3 currentHeading => _currentHeading;
 
-    private Golem _currentGolem;
-    [SerializeField] private float _golemSearchRadius;
+    [SerializeField] private Golem _sceneGolem;
     [SerializeField] private Vector3 _attachmentOffset;
+    private Golem _currentGolem;
 
     private Rigidbody _rb;
     private Transform _thisTransform;
@@ -39,8 +39,8 @@ public class Orb : MonoBehaviour, IRequireInput
     {
         InitialiseFSM();
 
-        DebugWindow.Inspect(() => "Current State: " + _fsm.GetCurrentState().debugName);
-        DebugWindow.Inspect(() => "Current Heading: " + _currentHeading.ToString());
+        DebugWindow.Inspect(() => "Orb State: " + _fsm.GetCurrentState().debugName);
+        DebugWindow.Inspect(() => "Orb Heading: " + _currentHeading.ToString());
     }
 
     private void Update()
@@ -74,6 +74,19 @@ public class Orb : MonoBehaviour, IRequireInput
             return _currentHeading == Vector3.zero;
         });
 
+        _fsm.AddTransition(idleState, mountedState, () => 
+        { 
+            if (Input.GetKeyDown(KeyCode.F))
+                return EnterGolem();
+
+            return false;
+        });
+
+        _fsm.AddTransition(mountedState, idleState, () => 
+        {
+            return Input.GetKeyDown(KeyCode.F);
+        });
+
         _fsm.SetDefaultState(idleState);
     }
 
@@ -94,12 +107,36 @@ public class Orb : MonoBehaviour, IRequireInput
 
     public void Move()
     {
-        _movement.Move(_currentHeading);
+        _movement.Move(Vector3.forward);
     }
 
     public void ResetState()
     {
         _movement.Move(Vector3.zero);
+    }
+
+    public bool EnterGolem()
+    {
+        _currentGolem = _sceneGolem;
+        _rb.useGravity = false;
+        GetComponent<Collider>().enabled = false;
+        _currentGolem.Enter();
+        return true;
+    }
+
+    public void StickToGolem()
+    {
+        _rb.position = _currentGolem.transform.position + _attachmentOffset;
+    }
+
+    public void ExitGolem()
+    {
+        GetComponent<Collider>().enabled = true;
+        _rb.useGravity = true;
+        _currentGolem.Exit();
+        _currentGolem = null;
+
+        VirtualCameraManager.instance.ToggleVCam(_CMVirtualCamera);
     }
 
     // Interfaces

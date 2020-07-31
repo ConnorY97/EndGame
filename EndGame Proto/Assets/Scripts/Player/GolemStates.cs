@@ -3,7 +3,37 @@ using UnityEngine;
 
 namespace GolemStates
 {
-	public class IdleState : FSM.State
+    public class DormantState : FSM.State
+    {
+		private Golem _golem;
+
+		public DormantState(Golem golem) : base("Dormant State")
+        {
+			_golem = golem;
+        }
+
+        public override void OnEnter()
+        {
+
+        }
+
+        public override void OnExit()
+        {
+
+        }
+
+        public override void UpdateLogic()
+        {
+
+        }
+
+        public override void UpdatePhysics()
+        {
+
+        }
+    }
+
+    public class IdleState : FSM.State
 	{
 		private Golem _golem;
 

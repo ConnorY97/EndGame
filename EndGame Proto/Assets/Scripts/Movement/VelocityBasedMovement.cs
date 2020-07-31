@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class VelocityBasedMovement : IMovement
+public class VelocityBasedMovement : IMovementController
 {
     private float _speed;
     private Rigidbody _rb;
