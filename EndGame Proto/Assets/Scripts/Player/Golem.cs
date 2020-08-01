@@ -152,9 +152,12 @@ public class Golem : MonoBehaviour, IRequireInput
         _controller.Move(_heading);
     }
 
+    Quaternion targetRotation = Quaternion.identity;
     public void Orientate()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(_forwardRelativeToCamera, Vector3.up);
+        if (_heading != Vector3.zero)
+            targetRotation = Quaternion.LookRotation(_heading, Vector3.up);
+
         _thisTransform.rotation = Quaternion.Slerp(_thisTransform.rotation, targetRotation, _angularSpeed * Time.fixedDeltaTime);
     }
 
@@ -185,7 +188,7 @@ public class Golem : MonoBehaviour, IRequireInput
 
     public void Push()
     {
-        _controller.Move(_inputData.normalisedInput.y * -_blockNormal / _block.mass);
+        _controller.Move(_inputData.input.y * -_blockNormal / _block.mass);
     }
 
     public void StopPushing()

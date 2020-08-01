@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharacterController : IMovementController
 {
@@ -38,13 +37,13 @@ public class CharacterController : IMovementController
     {
         Vector3 velocity = _rb.velocity;
 
-        //_isGrounded = Physics.Raycast(_rb.position + Vector3.up * 0.5f, Vector3.down, 0.55f, _groundLayer);
-
         // FUCKING HATE THIS JANKY MATH.
         Vector3 acceleration = _bufferedAcceleration * Time.fixedDeltaTime;
 
         Debug.DrawRay(_rb.position + Vector3.up * 0.5f + _bufferedDir * 0.25f, Vector3.down * 0.5f, Color.magenta);
         RaycastHit hitInfo;
+
+        //                                       Half radius seems to not raise character from ground
         if (Physics.Raycast(_rb.position + Vector3.up * 0.5f + _bufferedDir * 0.25f, Vector3.down, out hitInfo, 0.5f, _groundLayer))
         {
             Vector3 accelerationDir = Vector3.ProjectOnPlane(acceleration, hitInfo.normal).normalized;
@@ -62,7 +61,7 @@ public class CharacterController : IMovementController
             velocity += acceleration;
         }
 
-        // add friction. INTERFERES WITH GRAVITY.
+        // add friction. INTERFERES WITH GRAVITY. FIX THIS!
         Vector3 postFrictionVelocity = velocity + -velocity.normalized * _settings.friction * Time.fixedDeltaTime;
         if (Vector3.Dot(velocity.normalized, postFrictionVelocity.normalized) > 0f)
             velocity += -velocity.normalized * _settings.friction * Time.fixedDeltaTime;
