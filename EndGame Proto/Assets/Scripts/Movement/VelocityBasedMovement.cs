@@ -25,4 +25,14 @@ public class VelocityBasedMovement : IMovementController
     {
         throw new System.NotImplementedException();
     }
+
+    public void FixedUpdate()
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        
+    }
 }

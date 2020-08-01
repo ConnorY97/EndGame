@@ -44,13 +44,11 @@ namespace GolemStates
 
 		public override void OnEnter()
 		{
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
 			_golem.ResetState();
-			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -75,13 +73,11 @@ namespace GolemStates
 
 		public override void OnEnter()
 		{
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
 			_golem.ResetState();
-			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -107,7 +103,6 @@ namespace GolemStates
 		public override void OnEnter()
 		{
 			_golem.SetAnimatorBool("Lifting", true);
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
@@ -115,7 +110,6 @@ namespace GolemStates
 			_golem.SetAnimatorBool("Lifting", false);
 			_golem.StopLifting();
 			_golem.ResetState();
-			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -141,7 +135,6 @@ namespace GolemStates
 		public override void OnEnter()
 		{
 			_golem.SetAnimatorBool("Pushing", true);
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()

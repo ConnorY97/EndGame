@@ -54,12 +54,11 @@ namespace OrbStates
 
         public override void UpdateLogic()
         {
-
+            _orb.Move();
         }
 
         public override void UpdatePhysics()
         {
-            //_orb.Move();
             _orb.Orientate();
         }
     }

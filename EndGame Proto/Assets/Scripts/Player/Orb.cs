@@ -107,7 +107,7 @@ public class Orb : MonoBehaviour, IRequireInput
 
     public void Move()
     {
-        _movement.Move(Vector3.forward);
+        _movement.Move(_currentHeading);
     }
 
     public void ResetState()
