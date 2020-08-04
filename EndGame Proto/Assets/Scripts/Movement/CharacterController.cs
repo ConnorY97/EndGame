@@ -40,9 +40,10 @@ public class CharacterController : IMovementController
             float velocityMag = velocity.magnitude;
             velocity = velocityDir * velocityMag;
 
+            // for angle calc.
             Vector3 flat = slope;
             flat.y = 0f;
-            Debug.Log(Vector3.Angle(slope, flat.normalized));
+
             Debug.DrawRay(_rb.position, velocityDir, Color.blue);
         }
         else
