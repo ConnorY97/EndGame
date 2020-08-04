@@ -7,7 +7,10 @@ public class DebugWindow : MonoBehaviour
 
     public static void AddPrintTask(PrintTaskFunc printTask)
     {
-        _instance.RegisterPrintTask(printTask);
+        if (_instance != null)
+            _instance.RegisterPrintTask(printTask);
+        else
+            Debug.Log("Debug Window missing");
     }
 
     [Header("Window")]
