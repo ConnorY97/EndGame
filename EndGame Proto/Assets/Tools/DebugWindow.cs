@@ -5,9 +5,9 @@ public class DebugWindow : MonoBehaviour
 {
     private static DebugWindow _instance;
 
-    public static void Inspect(InspectFunc func)
+    public static void AddPrintTask(PrintTaskFunc printTask)
     {
-        _instance.AddInspectReq(func);
+        _instance.RegisterPrintTask(printTask);
     }
 
     [Header("Window")]
@@ -27,12 +27,13 @@ public class DebugWindow : MonoBehaviour
 
     //               FUNCTIONALITY
     // ---------------------------------------------
-    private List<InspectFunc> _inspectFuncs;
+    public delegate string PrintTaskFunc();
+    private List<PrintTaskFunc> _printTasks;
 
     private void Awake()
     {
         _instance = this;
-        _inspectFuncs = new List<InspectFunc>(20);
+        _printTasks = new List<PrintTaskFunc>(20);
     }
 
     private void Start()
@@ -49,19 +50,17 @@ public class DebugWindow : MonoBehaviour
         _elementStyle.contentOffset = Vector2.one * ((_width - (_width - _areaPadding)) / 2f);
 
         GUILayout.BeginArea(_windowRect, _windowStyle);
-        for (int i = 0; i < _inspectFuncs.Count; i++)
+        for (int i = 0; i < _printTasks.Count; i++)
         {
-            _content.text = _inspectFuncs[i]();
+            _content.text = _printTasks[i]();
             GUILayout.Label(_content, _elementStyle);
             GUILayout.Space(_elementSpacing);
         }
         GUILayout.EndArea();
     }
 
-    public delegate string InspectFunc();
-
-    private void AddInspectReq(InspectFunc func)
+    private void RegisterPrintTask(PrintTaskFunc func)
     {
-        _inspectFuncs.Add(func);
+        _printTasks.Add(func);
     }
 }

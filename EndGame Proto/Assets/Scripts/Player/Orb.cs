@@ -4,9 +4,9 @@ using FSM;
 
 public class Orb : MonoBehaviour, IRequireInput
 {
-    [SerializeField] private float _speed;
+    [SerializeField] private CharacterControllerSettings _controllerSettings;
     [SerializeField] private float _angularSpeed;
-    private IMovementController _movement;
+    private IMovementController _controller;
 
     private InputData _inputData;
 
@@ -29,7 +29,7 @@ public class Orb : MonoBehaviour, IRequireInput
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _movement = new VelocityBasedMovement(_rb, _speed);
+        _controller = new CharacterController(_rb, _controllerSettings);
 
         _thisTransform = transform;
         _cameraTransform = Camera.main.transform;
@@ -39,8 +39,8 @@ public class Orb : MonoBehaviour, IRequireInput
     {
         InitialiseFSM();
 
-        DebugWindow.Inspect(() => "Orb State: " + _fsm.GetCurrentState().debugName);
-        DebugWindow.Inspect(() => "Orb Heading: " + _currentHeading.ToString());
+        DebugWindow.AddPrintTask(() => "Orb State: " + _fsm.GetCurrentState().debugName);
+        DebugWindow.AddPrintTask(() => "Orb Heading: " + _currentHeading.ToString());
     }
 
     private void Update()
@@ -54,6 +54,7 @@ public class Orb : MonoBehaviour, IRequireInput
     private void FixedUpdate()
     {
         _fsm.UpdatePhysics();
+        _controller.FixedUpdate();
     }
 
     private void InitialiseFSM()
@@ -107,12 +108,12 @@ public class Orb : MonoBehaviour, IRequireInput
 
     public void Move()
     {
-        _movement.Move(_currentHeading);
+        _controller.Move(_currentHeading);
     }
 
     public void ResetState()
     {
-        _movement.Move(Vector3.zero);
+        _controller.Move(Vector3.zero);
     }
 
     public bool EnterGolem()
@@ -146,5 +147,10 @@ public class Orb : MonoBehaviour, IRequireInput
             _currentGolem.SetInputData(data);
         else
             _inputData = data;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        _controller.OnCollisionEnter(collision);
     }
 }

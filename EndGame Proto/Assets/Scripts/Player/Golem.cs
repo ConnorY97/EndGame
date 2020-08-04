@@ -29,17 +29,15 @@ public class Golem : MonoBehaviour, IRequireInput
     private bool _dormant = true;
 
     private Rigidbody _rb;
-    private Animator _anim;
+    [SerializeField] private Animator _anim;
 
     private Transform _thisTransform;
     private Transform _cameraTransform;
     [SerializeField] private GameObject _CMVirtualCamera;
-    [SerializeField] private Rigidbody _emptyRb;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _anim = GetComponent<Animator>();
         _controller = new CharacterController(_rb, _controllerSettings);
 
         _thisTransform = transform;
@@ -52,9 +50,9 @@ public class Golem : MonoBehaviour, IRequireInput
     {
         InitaliseFSM();
 
-        DebugWindow.Inspect(() => { return "Golem State: " + _fsm.GetCurrentState().debugName; });
-        DebugWindow.Inspect(() => { return "Golem Heading: " + _heading.ToString(); });
-        DebugWindow.Inspect(() => { return "Golem Speed: " + _rb.velocity.magnitude.ToString(); });
+        DebugWindow.AddPrintTask(() => { return "Golem State: " + _fsm.GetCurrentState().debugName; });
+        DebugWindow.AddPrintTask(() => { return "Golem Heading: " + _heading.ToString(); });
+        DebugWindow.AddPrintTask(() => { return "Golem Speed: " + _rb.velocity.magnitude.ToString(); });
     }
 
     private void Update()
@@ -193,7 +191,7 @@ public class Golem : MonoBehaviour, IRequireInput
 
     public void StopPushing()
     {
-        _blockJoint.connectedBody = _emptyRb;
+        _blockJoint.connectedBody = null;
         _blockRigidbody.isKinematic = true;
         _block = null;
         _blockRigidbody = null;
