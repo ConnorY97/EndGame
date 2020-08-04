@@ -15,7 +15,7 @@ MonoBehaviour:
   maxSpeed: 4
   timeToMaxSpeed: 0.5
   friction: 25
-  gravity: 9.82
+  gravity: 35
   maxIncline: 0
   groundLayer:
     serializedVersion: 2

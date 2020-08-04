@@ -25,26 +25,33 @@ public class CharacterController : IMovementController
         Vector3 velocity = _rb.velocity;
         Vector3 acceleration = _bufferedAcceleration * Time.fixedDeltaTime;
 
-        Debug.DrawRay(_rb.position + Vector3.up * _settings.rayOffset + velocity.normalized * (_settings.colliderRadius / 2f), Vector3.down * _settings.colliderRadius, Color.magenta);
-        // This raycast is responsible for detecting a slope in front of the character.
-        if (Physics.Raycast(_rb.position + Vector3.up * _settings.rayOffset + velocity.normalized * (_settings.colliderRadius / 2f), Vector3.down, out RaycastHit hitInfo, _settings.colliderRadius, _settings.groundLayer))
-        {
-            // Transform the direction we're accelerating to be parallel to the slope.
-            Vector3 accelerationDir = Vector3.ProjectOnPlane(acceleration, hitInfo.normal).normalized;
-            float accelerationMag = acceleration.magnitude;
-            velocity += accelerationDir * accelerationMag;
+        //if (velocity != Vector3.zero || acceleration != Vector3.zero)
+        //{
+            Debug.DrawRay(_rb.position + Vector3.up * _settings.rayOffset + velocity.normalized * (_settings.colliderRadius / 2f), Vector3.down * _settings.colliderRadius, Color.magenta);
+            // This raycast is responsible for detecting a slope in front of the character.
+            if (Physics.Raycast(_rb.position + Vector3.up * _settings.rayOffset + velocity.normalized * (_settings.colliderRadius / 2f), Vector3.down, out RaycastHit hitInfo, _settings.colliderRadius, _settings.groundLayer))
+            {
+                // Transform the direction we're accelerating to be parallel to the slope.
+                Vector3 slope = Vector3.Cross(_rb.transform.right, hitInfo.normal).normalized;
+                Vector3 accelerationDir = Vector3.ProjectOnPlane(acceleration, hitInfo.normal).normalized;
+                float accelerationMag = acceleration.magnitude;
+                velocity += accelerationDir * accelerationMag;
 
-            // Transform the direction we're moving to be parallel to the slope.
-            Vector3 velocityDir = Vector3.ProjectOnPlane(velocity, hitInfo.normal);
-            float velocityMag = velocity.magnitude;
-            velocity = velocityDir.normalized * velocityMag;
+                // Transform the direction we're moving to be parallel to the slope.
+                Vector3 velocityDir = Vector3.ProjectOnPlane(velocity, hitInfo.normal).normalized;
+                float velocityMag = velocity.magnitude;
+                velocity = velocityDir * velocityMag;
 
-            Debug.DrawRay(_rb.position, velocityDir, Color.blue);
-        }
-        else
-        {
-            velocity += acceleration;
-        }
+                Vector3 flat = slope;
+                flat.y = 0f;
+                Debug.Log(Vector3.Angle(slope, flat.normalized));
+                Debug.DrawRay(_rb.position, velocityDir, Color.blue);
+            }
+            else
+            {
+                velocity += acceleration;
+            }
+        //}
 
         // Apply gravity only when grounded.
         Debug.Log(_isGrounded);

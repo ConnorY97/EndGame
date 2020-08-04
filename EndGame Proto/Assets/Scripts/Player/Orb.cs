@@ -61,9 +61,9 @@ public class Orb : MonoBehaviour, IRequireInput
     {
         _fsm = new FSM.FSM();
 
-        State idleState = new OrbStates.IdleState(this);
-        State rollingState = new OrbStates.RollingState(this);
-        State mountedState = new OrbStates.MountedState(this);
+        State idleState = new IdleState(this);
+        State rollingState = new RollingState(this);
+        State mountedState = new MountedState(this);
 
         _fsm.AddTransition(idleState, rollingState, () => 
         {
