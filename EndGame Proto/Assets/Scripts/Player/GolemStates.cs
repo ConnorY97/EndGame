@@ -3,7 +3,37 @@ using UnityEngine;
 
 namespace GolemStates
 {
-	public class IdleState : FSM.State
+    public class DormantState : FSM.State
+    {
+		private Golem _golem;
+
+		public DormantState(Golem golem) : base("Dormant State")
+        {
+			_golem = golem;
+        }
+
+        public override void OnEnter()
+        {
+
+        }
+
+        public override void OnExit()
+        {
+
+        }
+
+        public override void UpdateLogic()
+        {
+
+        }
+
+        public override void UpdatePhysics()
+        {
+
+        }
+    }
+
+    public class IdleState : FSM.State
 	{
 		private Golem _golem;
 
@@ -14,13 +44,11 @@ namespace GolemStates
 
 		public override void OnEnter()
 		{
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
 			_golem.ResetState();
-			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -45,13 +73,11 @@ namespace GolemStates
 
 		public override void OnEnter()
 		{
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
 		{
 			_golem.ResetState();
-			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -77,7 +103,6 @@ namespace GolemStates
 		public override void OnEnter()
 		{
 			_golem.SetAnimatorBool("Lifting", true);
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
@@ -85,7 +110,6 @@ namespace GolemStates
 			_golem.SetAnimatorBool("Lifting", false);
 			_golem.StopLifting();
 			_golem.ResetState();
-			Debug.Log($"Exited {_debugName} State!");
 		}
 
 		public override void UpdateLogic()
@@ -111,7 +135,6 @@ namespace GolemStates
 		public override void OnEnter()
 		{
 			_golem.SetAnimatorBool("Pushing", true);
-			Debug.Log($"Entered {_debugName} State!");
 		}
 
 		public override void OnExit()
