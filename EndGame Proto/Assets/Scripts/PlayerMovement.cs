@@ -14,10 +14,10 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float _angularSpeed = 0;
 	[SerializeField] private float _rayLength = 0;
 
-	public GameObject handPosition; 
+	public GameObject handPosition;
 
 	private Rigidbody _rb;
-	private Animator _animator; 
+	private Animator _animator;
 
 	private bool _pushing = false;
 	private bool _lifting = false;
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 	private STATE _currentState = STATE.FREE; 
 
 	private Transform _cameraTransform;
-	private Vector3 _heading; 
+	private Vector3 _heading;
 	private Vector3 _forward;
 	private Vector3 _right;
 	private Vector3 _input;
@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private Rigidbody _interactedObject;
 	private Vector3 _ioNormal;
-	private Vector3 _ioStartPosition; 
+	private Vector3 _ioStartPosition;
 
 	private int _layerMask = 1 << 8;
 
@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 	void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
-		_animator = GetComponent<Animator>(); 
+		_animator = GetComponent<Animator>();
 		_cameraTransform = Camera.main.transform;
 	}
 
@@ -77,6 +77,16 @@ public class PlayerMovement : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
 			Lift(); 
+		}
+
+		Debug.DrawRay(_rayPos, _forward * _rayLength, Color.red); 
+		if (Input.GetKeyDown(KeyCode.F))
+		{
+			RaycastHit hit; 
+
+			if (Physics.Raycast(_rayPos, _forward, out hit, _rayLength, _layerMask))
+				hit.collider.GetComponent<IInteractable>().Interact();
+			
 		}
 
 
