@@ -66,9 +66,9 @@ public class Door : MonoBehaviour, IInteractable
     private void OnDrawGizmos()
     {
 		Gizmos.color = Color.green;
-		Gizmos.DrawCube(transform.position + _openedOffset, transform.localScale);
+		Gizmos.DrawWireSphere(transform.position + _openedOffset, 1f);
 
 		Gizmos.color = Color.red;
-		Gizmos.DrawCube(transform.position + _closedOffset, transform.localScale);
+		Gizmos.DrawWireSphere(transform.position + _closedOffset, 1f);
 	}
 }
