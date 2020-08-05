@@ -29,7 +29,7 @@ public class InteractableCube : MonoBehaviour
 			bool _bottomRight = Physics.Raycast(transform.position + new Vector3(halfLength, -halfLength + 0.1f, -halfLength), Vector3.down, _rayPadding, _layermask);
 			bool _bottomLeft = Physics.Raycast(transform.position + new Vector3(-halfLength, -halfLength + 0.1f, -halfLength), Vector3.down, _rayPadding, _layermask);
 			bool _topLeft = Physics.Raycast(transform.position + new Vector3(-halfLength, -halfLength + 0.1f, halfLength), Vector3.down, _rayPadding, _layermask);
-			
+
 			if (!_topRight && !_topLeft && !_bottomRight && !_bottomLeft)
 			{
 				if (_fj != null)
