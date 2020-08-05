@@ -20,7 +20,7 @@ public class Golem : MonoBehaviour, IRequireInput
     [SerializeField] private float _blockInteractionDistance;
     [SerializeField] private float _distFromBlock;
     [SerializeField] private Transform _handJoint;
-    private Block _block;
+    private InteractableCube _block;
     private Rigidbody _blockRigidbody;
     private FixedJoint _blockJoint;
     private Vector3 _blockNormal;
@@ -164,7 +164,7 @@ public class Golem : MonoBehaviour, IRequireInput
         RaycastHit hit;
         if (Physics.Raycast(_thisTransform.position + Vector3.up * 0.5f, _forwardRelativeToCamera, out hit, _blockInteractionDistance, _blockLayer))
         {
-            _block = hit.collider.GetComponent<Block>();
+            _block = hit.collider.GetComponent<InteractableCube>();
             _blockRigidbody = hit.collider.GetComponent<Rigidbody>();
             _blockJoint = hit.collider.GetComponent<FixedJoint>();
 
@@ -178,6 +178,7 @@ public class Golem : MonoBehaviour, IRequireInput
             _thisTransform.rotation = Quaternion.LookRotation(-_blockNormal);
 
             _blockJoint.connectedBody = _rb;
+            _block.SetIsInteractable(true);
             return true;
         }
 
@@ -191,6 +192,7 @@ public class Golem : MonoBehaviour, IRequireInput
 
     public void StopPushing()
     {
+        _block.SetIsInteractable(false);
         _blockJoint.connectedBody = null;
         _blockRigidbody.isKinematic = true;
         _block = null;
