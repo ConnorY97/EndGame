@@ -21,11 +21,6 @@ public class InteractableCube : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		//float halfLength = transform.localScale.x / 2;
-		//Debug.DrawRay(transform.position + new Vector3(-halfLength, -halfLength + 0.1f, halfLength), Vector3.down * _rayPadding);
-		//Debug.DrawRay(transform.position + new Vector3(halfLength, -halfLength + 0.1f, -halfLength), Vector3.down * _rayPadding);
-		//Debug.DrawRay(transform.position + new Vector3(-halfLength, -halfLength + 0.1f, -halfLength), Vector3.down * _rayPadding);
-		//Debug.DrawRay(transform.position + new Vector3(halfLength, -halfLength + 0.1f, halfLength), Vector3.down * _rayPadding);
 
 		if (_isInteracted == false)
 		{
@@ -42,10 +37,6 @@ public class InteractableCube : MonoBehaviour
 				if (_rb.isKinematic == true)
 					_rb.isKinematic = false;
 			}
-			Debug.Log(_topRight);
-			Debug.Log(_topLeft);
-			Debug.Log(_bottomLeft);
-			Debug.Log(_bottomRight);
 
 			if (_topRight && _topLeft && _bottomRight && _bottomLeft)
 			{
@@ -53,7 +44,6 @@ public class InteractableCube : MonoBehaviour
 					_fj = gameObject.AddComponent<FixedJoint>();
 				if (_rb.isKinematic == false)
 					_rb.isKinematic = true;
-				Debug.Log("FUCK"); 
 			}
 		}
 
