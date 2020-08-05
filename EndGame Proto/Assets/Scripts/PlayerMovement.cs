@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float _speed = 0;
 	[SerializeField] private float _angularSpeed = 0;
 	[SerializeField] private float _rayLength = 0;
+	[SerializeField] private float _pushOffset = 0; 
 
 	public GameObject handPosition;
 
@@ -150,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 					_ioStartPosition.y = transform.position.y;
 					_interactedObject.isKinematic = false;
 					_ioNormal = hit.normal;
-					_rb.transform.position = _ioStartPosition + (_ioNormal * 1.2f);
+					_rb.transform.position = _ioStartPosition + (_ioNormal * _pushOffset);
 					transform.rotation = Quaternion.LookRotation(-_ioNormal);
 					_interactedObject.GetComponent<FixedJoint>().connectedBody = _rb;
 					_pushing = true;
