@@ -8,6 +8,9 @@ TagManager:
   - PressurePlate
   - Interactable
   - Boulder
+  - Golem
+  - Floor
+  - Orb
   layers:
   - Default
   - TransparentFX
@@ -18,8 +21,8 @@ TagManager:
   - 
   - 
   - Interactable
-  - 
-  - 
+  - Ground
+  - Floor
   - 
   - 
   - 

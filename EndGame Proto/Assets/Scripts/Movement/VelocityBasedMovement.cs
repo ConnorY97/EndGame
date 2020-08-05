@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class VelocityBasedMovement : IMovement
+public class VelocityBasedMovement : IMovementController
 {
     private float _speed;
     private Rigidbody _rb;
@@ -13,7 +13,7 @@ public class VelocityBasedMovement : IMovement
 
     public void Move(Vector3 dir)
     {
-        _rb.velocity = dir * _speed;
+        _rb.velocity = new Vector3(dir.x * _speed, _rb.velocity.y, dir.z * _speed);
     }
 
     public void AddExternalForce(Vector3 force)
@@ -24,5 +24,15 @@ public class VelocityBasedMovement : IMovement
     public void AddForce(Vector3 force)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void FixedUpdate()
+    {
+
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        
     }
 }
