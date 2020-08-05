@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.AccessControl;
-using UnityEngine;
-using UnityEngine.Experimental.AI;
+﻿using UnityEngine;
 
 public class InteractableCube : MonoBehaviour
 {
 	[SerializeField] private float _mass; public float mass => _mass;
-	[SerializeField] private float _rayLenth = 0; 
+	[SerializeField] private float _rayLenth = 0; // could possibly calculate this as height / 2 + tiny padding instead of exposing this.
 
 	private FixedJoint _fj;
 	private Rigidbody _rb;
