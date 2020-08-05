@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 749128882682582629}
   - component: {fileID: 749128882682582650}
   - component: {fileID: 749128882682582625}
+  - component: {fileID: 1888377099563537591}
   m_Layer: 8
   m_Name: Block
   m_TagString: Interactable
