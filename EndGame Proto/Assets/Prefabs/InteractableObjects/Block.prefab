@@ -139,4 +139,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mass: 0.5
-  _rayLenth: 0.1
+  _rayPadding: 0.1

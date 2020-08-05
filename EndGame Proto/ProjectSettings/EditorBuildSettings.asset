@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Example.unity
     guid: bfac20d5d882bae4199d5bebc31ac3f1
+  - enabled: 1
+    path: Assets/Scenes/Tutorial Puzzle.unity
+    guid: c2d5b705a4db26a4cbf71ea94065851f
   m_configObjects: {}
