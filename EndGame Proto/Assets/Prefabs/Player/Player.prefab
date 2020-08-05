@@ -41,6 +41,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2675198546052986535}
     m_Modifications:
+    - target: {fileID: 814818497479095720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 2.963456
+      objectReference: {fileID: 0}
+    - target: {fileID: 814818497479095720, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -5.540346
+      objectReference: {fileID: 0}
     - target: {fileID: 1293554827178573581, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -101,6 +111,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: VCAM_Golem
       objectReference: {fileID: 0}
+    - target: {fileID: 6610711795302986051, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 2.963456
+      objectReference: {fileID: 0}
+    - target: {fileID: 6610711795302986051, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -5.540346
+      objectReference: {fileID: 0}
     - target: {fileID: 7205261507498174350, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
         type: 3}
       propertyPath: m_LookAt
@@ -111,6 +131,16 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 6943004891405329526}
+    - target: {fileID: 7930717591811141446, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 2.963456
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930717591811141446, guid: ff0e56e7370ef9f49a5074a7d7386a8b,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -5.540346
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff0e56e7370ef9f49a5074a7d7386a8b, type: 3}
 --- !u!1 &2675198545166174070 stripped
@@ -137,6 +167,11 @@ PrefabInstance:
       propertyPath: _CMVirtualCamera
       value: 
       objectReference: {fileID: 2675198545166174070}
+    - target: {fileID: 1158216224225001141, guid: 22302e4274f9d65488b49d912f937723,
+        type: 3}
+      propertyPath: _distFromBlock
+      value: 1.75
+      objectReference: {fileID: 0}
     - target: {fileID: 6154304450633651539, guid: 22302e4274f9d65488b49d912f937723,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -315,15 +350,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2675198546052986535}
     m_Modifications:
+    - target: {fileID: 5470734497725159181, guid: 79b3337425c2dee4b9e3da197f2e2d6c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1e-45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5470734497725159181, guid: 79b3337425c2dee4b9e3da197f2e2d6c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 6028457116460594154, guid: 79b3337425c2dee4b9e3da197f2e2d6c,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000004278879
+      value: -0.0000000042738275
       objectReference: {fileID: 0}
     - target: {fileID: 6028457116460594154, guid: 79b3337425c2dee4b9e3da197f2e2d6c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -4.4149773e-10
+      value: 4.409765e-10
       objectReference: {fileID: 0}
     - target: {fileID: 7303648437547722993, guid: 79b3337425c2dee4b9e3da197f2e2d6c,
         type: 3}
