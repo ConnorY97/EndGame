@@ -7,4 +7,5 @@ public interface IMovementController
     void AddForce(Vector3 force);
     void AddExternalForce(Vector3 force);
     void OnCollisionEnter(Collision collision);
+    bool IsGrounded();
 }
