@@ -55,10 +55,8 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("fu");
         if (other.gameObject.CompareTag(_targetTag))
         {
-            Debug.Log("fu v2");
             _triggered = true;
             _startTime = Time.time;
 

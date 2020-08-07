@@ -38,7 +38,6 @@ public class Golem : MonoBehaviour, IRequireInput
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _controller = new CharacterController(_rb, _controllerSettings);
 
         _thisTransform = transform;
         _cameraTransform = Camera.main.transform;
@@ -48,11 +47,13 @@ public class Golem : MonoBehaviour, IRequireInput
 
     private void Start()
     {
+        _controller = new CharacterController(_rb, _controllerSettings);
         InitaliseFSM();
 
         DebugWindow.AddPrintTask(() => { return "Golem State: " + _fsm.GetCurrentState().debugName; });
         DebugWindow.AddPrintTask(() => { return "Golem Heading: " + _heading.ToString(); });
         DebugWindow.AddPrintTask(() => { return "Golem Speed: " + _rb.velocity.magnitude.ToString(); });
+        DebugWindow.AddPrintTask(() => { return "Golem Velocity: " + _rb.velocity.ToString(); });
     }
 
     private void Update()
@@ -135,13 +136,11 @@ public class Golem : MonoBehaviour, IRequireInput
     public void Enter()
     {
         VirtualCameraManager.instance.ToggleVCam(_CMVirtualCamera);
-        _rb.isKinematic = false;
         _dormant = false;
     }
 
     public void Exit()
     {
-        _rb.isKinematic = true;
         _dormant = true;
     }
 
@@ -238,7 +237,8 @@ public class Golem : MonoBehaviour, IRequireInput
 
     public void ResetState()
     {
-        _rb.velocity = Vector3.zero;
+        _controller.Move(Vector3.zero);
+        //_rb.velocity = Vector3.zero;
     }
 
     public void SetAnimatorBool(string name, bool value)

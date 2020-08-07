@@ -79,8 +79,9 @@ namespace OrbStates
 
         public override void OnExit()
         {
-            _orb.ExitGolem();
             _orb.ResetState();
+            _orb.ResetVelocity();
+            _orb.ExitGolem();
         }
 
         public override void UpdateLogic()

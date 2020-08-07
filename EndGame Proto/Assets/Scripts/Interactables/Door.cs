@@ -63,12 +63,13 @@ public class Door : MonoBehaviour, IInteractable
 		_time = _dist / _speed;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
+		Gizmos.matrix = transform.localToWorldMatrix;
 		Gizmos.color = Color.green;
-		Gizmos.DrawWireSphere(transform.position + _openedOffset, 1f);
+		Gizmos.DrawCube(new Vector3(_openedOffset.x / transform.localScale.x, _openedOffset.y / transform.localScale.y, _openedOffset.z / transform.localScale.z), Vector3.one);
 
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position + _closedOffset, 1f);
+		Gizmos.DrawCube(new Vector3(_closedOffset.x / transform.localScale.x, _closedOffset.y / transform.localScale.y, _closedOffset.z / transform.localScale.z), Vector3.one);
 	}
 }
