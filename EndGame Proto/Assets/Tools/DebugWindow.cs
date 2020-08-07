@@ -9,8 +9,6 @@ public class DebugWindow : MonoBehaviour
     {
         if (_instance != null)
             _instance.RegisterPrintTask(printTask);
-        else
-            Debug.Log("Debug Window missing");
     }
 
     [Header("Window")]

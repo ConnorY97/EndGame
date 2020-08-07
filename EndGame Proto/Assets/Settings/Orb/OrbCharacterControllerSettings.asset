@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: OrbCharacterControllerSettings
   m_EditorClassIdentifier: 
   maxSpeed: 8
-  timeToMaxSpeed: 0.5
-  friction: 10
+  timeToMaxSpeed: 1
+  friction: 18
   gravity: 19.64
   maxIncline: 0
   groundLayer:
