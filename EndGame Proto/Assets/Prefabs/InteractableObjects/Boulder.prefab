@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3801043026978461853}
   - component: {fileID: 3801043026978461854}
   - component: {fileID: 3801043026978461855}
-  - component: {fileID: 8059634455123732705}
+  - component: {fileID: 3142832289829918024}
   m_Layer: 0
   m_Name: Boulder
   m_TagString: Boulder
@@ -111,7 +111,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8059634455123732705
+--- !u!114 &3142832289829918024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,6 +120,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3801043026978461856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e66ee09e3d6a2c448a0fd3cd02bd0760, type: 3}
+  m_Script: {fileID: 11500000, guid: 97f60cb318f19aa4daddd588d82eb6b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
