@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 9217365557780483839}
   - component: {fileID: 9217365557780483838}
   - component: {fileID: 9217365557780483833}
-  - component: {fileID: 9217365557780483837}
+  - component: {fileID: 5341837635206329804}
   m_Layer: 0
-  m_Name: PressurePlate
+  m_Name: Pressure_Plate
   m_TagString: PressurePlate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.18, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &9217365557780483837
+--- !u!114 &5341837635206329804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,8 +103,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217365557780483832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef6205579aa8e824e8d8f22f5ba7dc62, type: 3}
+  m_Script: {fileID: 11500000, guid: cbdcf2087b5005a4eb9de468d3484ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 1
+  _interactions:
+  - {fileID: 0}
   _distance: 0.1
-  _speed: 1
+  _speed: 2
