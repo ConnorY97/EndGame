@@ -5,7 +5,11 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
-    public void QuitGame()
+	public void Start()
+	{
+            Cursor.visible = true;
+	}
+	public void QuitGame()
 	{
 		Application.Quit(); 
 	}
