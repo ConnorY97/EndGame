@@ -29,7 +29,6 @@ public class Orb : MonoBehaviour, IRequireInput
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _controller = new CharacterController(_rb, _controllerSettings);
 
         _thisTransform = transform;
         _cameraTransform = Camera.main.transform;
@@ -37,10 +36,13 @@ public class Orb : MonoBehaviour, IRequireInput
 
     private void Start()
     {
+        _controller = new CharacterController(_rb, _controllerSettings);
         InitialiseFSM();
 
         DebugWindow.AddPrintTask(() => "Orb State: " + _fsm.GetCurrentState().debugName);
         DebugWindow.AddPrintTask(() => "Orb Heading: " + _currentHeading.ToString());
+        DebugWindow.AddPrintTask(() => "Orb Velocity: " + _rb.velocity.ToString());
+        DebugWindow.AddPrintTask(() => "Orb Grounded: " + _controller.IsGrounded().ToString());
     }
 
     private void Update()
@@ -114,6 +116,12 @@ public class Orb : MonoBehaviour, IRequireInput
     public void ResetState()
     {
         _controller.Move(Vector3.zero);
+        //_rb.velocity = Vector3.zero;
+    }
+
+    public void ResetVelocity()
+    {
+        _rb.velocity = Vector3.zero;
     }
 
     public bool EnterGolem()
