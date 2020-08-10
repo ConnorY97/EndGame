@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Tutorial Puzzle.unity
-    guid: c2d5b705a4db26a4cbf71ea94065851f
+    path: Assets/Scenes/TestScene.unity
+    guid: 1e497356be1dcf54cbabce5b124dcc60
   - enabled: 1
     path: Assets/Scenes/EndGame.unity
     guid: fb02a12ce94998540ac7c98e3a98e9c5
